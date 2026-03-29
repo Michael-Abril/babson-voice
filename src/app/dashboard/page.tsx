@@ -131,6 +131,7 @@ export default function FeedPage() {
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null);
   const [voting, setVoting] = useState(false);
+  const [voteError, setVoteError] = useState('');
 
   const userVotesMap = useMemo(() => {
     const map: Record<string, Vote> = {};
@@ -159,13 +160,19 @@ export default function FeedPage() {
   const handleVote = async (ideaId: string, type: 'up' | 'down') => {
     if (voting || !userLoaded || userId === 'anon') return;
     setVoting(true);
+    setVoteError('');
     try {
       const existing = userVotesMap[ideaId];
       if (existing && existing.voteType === type) await removeVote(existing.id);
       else await castVote(userId, ideaId, type, existing?.id);
       await recalculateIdeaVotes(ideaId);
       await Promise.all([refreshIdeas(), refreshVotes()]);
-    } catch {} finally { setVoting(false); }
+    } catch (err) {
+      setVoteError(err instanceof Error ? err.message : 'Could not save vote. Try again.');
+      setTimeout(() => setVoteError(''), 3000);
+    } finally {
+      setVoting(false);
+    }
   };
 
   const totalVotes = allVotes.length;
@@ -193,6 +200,13 @@ export default function FeedPage() {
 
   return (
     <div>
+      {/* Vote error toast */}
+      {voteError && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 bg-red-600 text-white text-xs font-medium rounded-xl shadow-lg animate-slide-up">
+          {voteError}
+        </div>
+      )}
+
       <section className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
         <div>
           <span className="mono-text text-[10px] uppercase tracking-widest text-emerald-600 font-semibold mb-1 block">Campus Governance</span>
@@ -309,7 +323,7 @@ export default function FeedPage() {
                   </div>
                   <div className="flex items-start gap-2 mb-2">
                     <h3 className="text-base md:text-lg font-semibold text-[#1a1c1c] leading-tight group-hover:text-emerald-700 transition-colors flex-1">{idea.title}</h3>
-                    {net >= 5 && (
+                    {net >= 3 && (
                       <span className="shrink-0 flex items-center gap-1 px-2 py-0.5 bg-orange-50 text-orange-500 rounded-full border border-orange-100 text-[10px] mono-text font-bold">
                         <Flame className="h-3 w-3" /> Hot
                       </span>

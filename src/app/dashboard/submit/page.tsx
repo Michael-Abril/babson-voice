@@ -61,7 +61,9 @@ export default function SubmitIdeaPage() {
       <div className="flex items-center gap-2 px-3.5 py-2.5 bg-emerald-50 border border-emerald-100 rounded-lg mb-7">
         <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
         <p className="text-xs text-emerald-700">
-          Posting anonymously{name ? ` as <strong>${name.charAt(0).toUpperCase() + name.slice(1)}</strong>` : ''} — your identity is never attached to this idea.
+          Posting <span className="font-semibold">anonymously</span>
+          {name ? <> as <span className="font-semibold">{name.charAt(0).toUpperCase() + name.slice(1)}</span></> : ''}{' '}
+          — your identity is never attached to this idea.
         </p>
       </div>
 
