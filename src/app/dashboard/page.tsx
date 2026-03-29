@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useIdeas, useAllVotes, useCurrentUser, castVote, removeVote, recalculateIdeaVotes, useVolunteers, signUpVolunteer } from '@/lib/hooks';
 import { CATEGORY_OPTIONS, CATEGORY_COLORS } from '@/lib/constants';
 import { formatRelativeDate } from '@/lib/utils';
-import { ChevronUp, ChevronDown, Plus, Hand, X, Flame, MessageSquare, Users, Vote, Lightbulb } from 'lucide-react';
+import { ChevronUp, ChevronDown, Plus, Hand, X, Flame, MessageSquare, Users, TrendingUp, Lightbulb } from 'lucide-react';
 import type { Idea, Vote } from '@/types';
 
 type SortMode = 'hot' | 'new' | 'top';
@@ -227,7 +227,7 @@ export default function FeedPage() {
             <span className="mono-text text-[11px] text-gray-400">idea{allIdeas.length !== 1 ? 's' : ''}</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl border border-gray-100 shadow-sm shrink-0">
-            <Vote className="h-4 w-4 text-emerald-600" />
+            <TrendingUp className="h-4 w-4 text-emerald-600" />
             <span className="mono-text text-[12px] font-bold text-[#1a1c1c]">{totalVotes}</span>
             <span className="mono-text text-[11px] text-gray-400">vote{totalVotes !== 1 ? 's' : ''}</span>
           </div>
