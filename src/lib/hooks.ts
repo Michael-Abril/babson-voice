@@ -4,12 +4,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { ideas, votes, volunteers } from './database';
 import type { Idea, Vote, Volunteer } from '../types';
 
-let usePrivyHook: any = null;
-try {
-  const uiKit = require('@varity-labs/ui-kit');
-  usePrivyHook = uiKit.usePrivy;
-} catch {}
-
 async function fetchWithRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1500): Promise<T> {
   for (let i = 0; i < retries; i++) {
     try {
@@ -23,26 +17,21 @@ async function fetchWithRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1500
 }
 
 export function useCurrentUser() {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const privy = usePrivyHook ? usePrivyHook() : { user: null, authenticated: false, logout: async () => {} };
+  const [email, setEmail] = useState('');
 
-  const user = privy.user;
-  const email =
-    user?.email?.address ||
-    user?.google?.email ||
-    user?.github?.email ||
-    user?.linkedAccounts?.find((a: any) => a.address && a.type === 'email')?.address ||
-    user?.linkedAccounts?.find((a: any) => a.email)?.email ||
-    '';
-
-  const name = email ? email.split('@')[0] : 'User';
+  useEffect(() => {
+    const stored = localStorage.getItem('babson-voice-email') || '';
+    setEmail(stored);
+  }, []);
 
   return {
-    id: user?.id || 'dev-user-id',
+    id: email || 'anon',
     email,
-    name,
-    authenticated: privy.authenticated,
-    logout: privy.logout,
+    name: email ? email.split('@')[0] : '',
+    authenticated: !!email,
+    logout: async () => {
+      localStorage.removeItem('babson-voice-email');
+    },
   };
 }
 

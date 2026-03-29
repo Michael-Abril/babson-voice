@@ -3,45 +3,34 @@
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { hardNavigate } from '@/lib/utils';
 import { Rss, PlusCircle, Bell, User, LogOut } from 'lucide-react';
 
-let PrivyProtectedRoute: any = null;
-let PrivyStackComponent: any = null;
-let usePrivyHook: any = null;
-
-try {
-  const uiKit = require('@varity-labs/ui-kit');
-  PrivyProtectedRoute = uiKit.PrivyProtectedRoute;
-  PrivyStackComponent = uiKit.PrivyStack;
-  usePrivyHook = uiKit.usePrivy;
-} catch {}
-
 const NAV_ITEMS = [
-  { label: 'Feed', icon: Rss, path: '/dashboard', mobileLabel: 'Feed' },
-  { label: 'Submit', icon: PlusCircle, path: '/dashboard/submit', mobileLabel: 'Submit' },
-  { label: 'Activity', icon: Bell, path: '/dashboard/activity', mobileLabel: 'Activity' },
+  { label: 'Feed',     icon: Rss,        path: '/dashboard',          mobileLabel: 'Feed' },
+  { label: 'Submit',   icon: PlusCircle, path: '/dashboard/submit',   mobileLabel: 'Submit' },
+  { label: 'Activity', icon: Bell,       path: '/dashboard/activity', mobileLabel: 'Activity' },
 ];
 
-function RedirectToLogin() {
-  const router = useRouter();
-  useEffect(() => { router.push('/login/'); }, [router]);
-  return null;
-}
-
-function DashboardShell({ children }: { children: React.ReactNode }) {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const privy = usePrivyHook ? usePrivyHook() : { user: null, logout: async () => {} };
-  const { user, logout } = privy;
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const router   = useRouter();
   const pathname = usePathname();
+  const [email, setEmail]             = useState('');
   const [showProfile, setShowProfile] = useState(false);
+  const [ready, setReady]             = useState(false);
 
-  const userEmail = user?.email?.address || user?.google?.email || '';
-  const initials = userEmail ? userEmail.charAt(0).toUpperCase() : 'U';
+  useEffect(() => {
+    const stored = localStorage.getItem('babson-voice-email');
+    if (!stored) {
+      router.push('/login/');
+      return;
+    }
+    setEmail(stored);
+    setReady(true);
+  }, [router]);
 
-  const handleLogout = async () => {
-    await logout();
-    hardNavigate('/');
+  const handleSignOut = () => {
+    localStorage.removeItem('babson-voice-email');
+    router.push('/');
   };
 
   const navItems = NAV_ITEMS.map((item) => ({
@@ -50,6 +39,9 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
       ? pathname === '/dashboard' || pathname === '/dashboard/'
       : pathname === item.path || pathname === item.path + '/' || pathname.startsWith(item.path + '/'),
   }));
+
+  // Don't render until we've confirmed auth
+  if (!ready) return null;
 
   return (
     <div className="min-h-screen bg-[#f9f9f9]">
@@ -83,32 +75,33 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
           </nav>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <button
-              onClick={() => setShowProfile(!showProfile)}
-              className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 bg-emerald-100 flex items-center justify-center text-xs font-bold text-emerald-700"
-            >
-              {initials}
-            </button>
-            {showProfile && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setShowProfile(false)} />
-                <div className="absolute right-0 top-10 z-50 w-56 bg-white rounded-lg border border-gray-200 shadow-lg py-2 animate-slide-up">
-                  <div className="px-4 py-2 border-b border-gray-100">
-                    <p className="text-xs text-gray-400 truncate">{userEmail || 'Not signed in'}</p>
-                  </div>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Sign out
-                  </button>
+        {/* Profile button */}
+        <div className="relative">
+          <button
+            onClick={() => setShowProfile(!showProfile)}
+            className="w-8 h-8 rounded-full border border-gray-200 bg-emerald-100 flex items-center justify-center text-xs font-bold text-emerald-700"
+          >
+            {email.charAt(0).toUpperCase()}
+          </button>
+
+          {showProfile && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setShowProfile(false)} />
+              <div className="absolute right-0 top-10 z-50 w-60 bg-white rounded-lg border border-gray-200 shadow-lg py-2 animate-slide-up">
+                <div className="px-4 py-2 border-b border-gray-100">
+                  <p className="text-[11px] text-gray-400">Signed in as</p>
+                  <p className="text-xs font-medium text-gray-700 truncate">{email}</p>
                 </div>
-              </>
-            )}
-          </div>
+                <button
+                  onClick={handleSignOut}
+                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Sign out
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </header>
 
@@ -123,9 +116,7 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
             key={item.path}
             href={item.path + '/'}
             className={`flex flex-col items-center justify-center px-3 py-1 rounded-xl transition-transform active:translate-y-0.5 ${
-              item.active
-                ? 'text-emerald-700 bg-emerald-50/50'
-                : 'text-zinc-500 hover:bg-zinc-50'
+              item.active ? 'text-emerald-700 bg-emerald-50/50' : 'text-zinc-500 hover:bg-zinc-50'
             }`}
           >
             <item.icon className="h-5 w-5" strokeWidth={item.active ? 2.5 : 1.75} />
@@ -141,24 +132,5 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
         </button>
       </nav>
     </div>
-  );
-}
-
-export default function DashboardRootLayout({ children }: { children: React.ReactNode }) {
-  if (!PrivyProtectedRoute || !PrivyStackComponent) {
-    return <DashboardShell>{children}</DashboardShell>;
-  }
-
-  return (
-    <PrivyStackComponent
-      appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
-      thirdwebClientId={process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID}
-      loginMethods={['email', 'google']}
-      appearance={{ theme: 'light', accentColor: '#059669', logo: '/logo.svg' }}
-    >
-      <PrivyProtectedRoute fallback={<RedirectToLogin />}>
-        <DashboardShell>{children}</DashboardShell>
-      </PrivyProtectedRoute>
-    </PrivyStackComponent>
   );
 }
