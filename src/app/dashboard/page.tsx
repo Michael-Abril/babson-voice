@@ -163,8 +163,13 @@ export default function FeedPage() {
     setVoteError('');
     try {
       const existing = userVotesMap[ideaId];
-      if (existing && existing.voteType === type) await removeVote(existing.id);
-      else await castVote(userId, ideaId, type, existing?.id);
+      // Tapping the same direction again = remove vote (toggle off)
+      if (existing && existing.voteType === type) {
+        await removeVote(existing.id);
+      } else {
+        // castVote now deletes ALL existing votes for this user+idea before inserting
+        await castVote(userId, ideaId, type);
+      }
       await recalculateIdeaVotes(ideaId);
       await Promise.all([refreshIdeas(), refreshVotes()]);
     } catch (err) {

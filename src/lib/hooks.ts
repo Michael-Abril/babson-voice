@@ -127,11 +127,13 @@ export async function castVote(
   userId: string,
   ideaId: string,
   voteType: 'up' | 'down',
-  existingVoteId?: string,
 ) {
-  if (existingVoteId) {
-    await votes().delete(existingVoteId);
-  }
+  // Delete ALL existing votes by this user on this idea before inserting.
+  // This guarantees one-vote-per-user even if stale duplicates exist in DB.
+  const allVotes = await votes().get() as Vote[];
+  const existing = allVotes.filter((v) => v.ideaId === ideaId && v.voterId === userId);
+  await Promise.all(existing.map((v) => votes().delete(v.id)));
+
   await votes().add({
     ideaId,
     voterId: userId,

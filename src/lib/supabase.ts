@@ -17,13 +17,13 @@ type WithId = { id: string };
  * Exposes the same .get() / .add() / .update() / .delete() surface
  * so hooks.ts and database.ts need zero changes.
  */
-export function collection<T extends WithId>(name: string) {
+export function collection<T extends WithId>(name: string, orderBy = 'createdAt') {
   return {
     async get(): Promise<T[]> {
       const { data, error } = await supabase
         .from(name)
         .select('*')
-        .order('createdAt', { ascending: false });
+        .order(orderBy, { ascending: false });
       if (error) throw new Error(error.message);
       return (data ?? []) as T[];
     },
