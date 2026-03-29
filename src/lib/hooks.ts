@@ -185,8 +185,8 @@ export async function signUpVolunteer(ideaId: string, userId: string, email: str
     email,
     signedUpAt: new Date().toISOString(),
   } as any);
-  // Bump the volunteer count on the idea
+  // Recount from DB after insert (new row is already included)
   const allVols = await volunteers().get() as Volunteer[];
-  const count = allVols.filter((v) => v.ideaId === ideaId).length + 1;
+  const count = allVols.filter((v) => v.ideaId === ideaId).length;
   await ideas().update(ideaId, { volunteerCount: count } as any);
 }

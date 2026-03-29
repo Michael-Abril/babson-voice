@@ -19,11 +19,21 @@ function IdeaDetailModal({
 }) {
   const { data: vols, refresh: refreshVols } = useVolunteers(idea.id);
   const [volunteering, setVolunteering] = useState(false);
+  const [volError, setVolError] = useState('');
   const alreadyVolunteered = vols.some((v) => v.userId === userId);
+
   const handleVolunteer = async () => {
     if (alreadyVolunteered || volunteering) return;
     setVolunteering(true);
-    try { await signUpVolunteer(idea.id, userId, userEmail); await refreshVols(); } catch {} finally { setVolunteering(false); }
+    setVolError('');
+    try {
+      await signUpVolunteer(idea.id, userId, userEmail);
+      await refreshVols();
+    } catch (err) {
+      setVolError(err instanceof Error ? err.message : 'Could not sign up. Please try again.');
+    } finally {
+      setVolunteering(false);
+    }
   };
   const net = idea.upvotes - idea.downvotes;
   const cat = CATEGORY_COLORS[idea.category] || CATEGORY_COLORS.other;
@@ -70,13 +80,18 @@ function IdeaDetailModal({
               <span className="mono-text text-[11px] text-gray-400">{vols.length} signed up</span>
             </div>
             {!alreadyVolunteered ? (
-              <button onClick={handleVolunteer} disabled={volunteering}
-                className="w-full h-[44px] bg-gradient-to-br from-emerald-600 to-emerald-700 text-white rounded-lg text-sm font-semibold shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98]">
-                {volunteering ? 'Signing up...' : 'I want to help make this happen'}
-              </button>
+              <>
+                <button onClick={handleVolunteer} disabled={volunteering}
+                  className="w-full h-[44px] bg-gradient-to-br from-emerald-600 to-emerald-700 text-white rounded-lg text-sm font-semibold shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98]">
+                  {volunteering ? 'Signing up…' : 'I want to help make this happen'}
+                </button>
+                {volError && (
+                  <p className="mt-2 text-xs text-red-600 text-center">{volError}</p>
+                )}
+              </>
             ) : (
-              <div className="w-full h-[44px] bg-emerald-50 text-emerald-700 rounded-lg text-sm font-medium flex items-center justify-center">
-                You signed up to help with this idea
+              <div className="w-full h-[44px] bg-emerald-50 text-emerald-700 rounded-lg text-sm font-medium flex items-center justify-center gap-2">
+                <Hand className="h-4 w-4" /> You&apos;re signed up to help
               </div>
             )}
           </div>
