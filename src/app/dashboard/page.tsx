@@ -6,10 +6,32 @@ import Link from 'next/link';
 import { useIdeas, useAllVotes, useCurrentUser, castVote, removeVote, recalculateIdeaVotes, useVolunteers, signUpVolunteer } from '@/lib/hooks';
 import { CATEGORY_OPTIONS, CATEGORY_COLORS } from '@/lib/constants';
 import { formatRelativeDate } from '@/lib/utils';
-import { ChevronUp, ChevronDown, Plus, Hand, X, Flame, Clock, TrendingUp, MessageSquare } from 'lucide-react';
+import { ChevronUp, ChevronDown, Plus, Hand, X, Flame, MessageSquare, Users, Vote, Lightbulb } from 'lucide-react';
 import type { Idea, Vote } from '@/types';
 
 type SortMode = 'hot' | 'new' | 'top';
+
+function IdeaSkeleton() {
+  return (
+    <div className="flex bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden animate-pulse">
+      <div className="w-14 bg-gray-50 flex flex-col items-center justify-center py-6 gap-2">
+        <div className="w-5 h-5 rounded bg-gray-200" />
+        <div className="w-6 h-4 rounded bg-gray-200" />
+        <div className="w-5 h-5 rounded bg-gray-200" />
+      </div>
+      <div className="flex-1 p-5">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-2 h-2 rounded-full bg-gray-200" />
+          <div className="w-16 h-2.5 rounded bg-gray-200" />
+          <div className="w-12 h-2.5 rounded bg-gray-200" />
+        </div>
+        <div className="w-3/4 h-5 rounded bg-gray-200 mb-3" />
+        <div className="w-full h-3 rounded bg-gray-200 mb-1.5" />
+        <div className="w-2/3 h-3 rounded bg-gray-200" />
+      </div>
+    </div>
+  );
+}
 
 function IdeaDetailModal({
   idea, userVote, userId, userEmail, onVote, onClose,
@@ -146,13 +168,32 @@ export default function FeedPage() {
     } catch {} finally { setVoting(false); }
   };
 
+  const totalVotes = allVotes.length;
+  const totalVolunteers = allIdeas.reduce((sum, i) => sum + i.volunteerCount, 0);
+
   if (loading) {
-    return <div className="flex items-center justify-center py-32"><div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-200 border-t-emerald-600" /></div>;
+    return (
+      <div>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+          <div>
+            <div className="w-24 h-3 rounded bg-gray-200 animate-pulse mb-2" />
+            <div className="w-32 h-9 rounded bg-gray-200 animate-pulse" />
+          </div>
+          <div className="w-28 h-9 rounded-lg bg-gray-200 animate-pulse" />
+        </div>
+        <div className="flex gap-6 mb-8">
+          {[1,2,3].map(n => <div key={n} className="w-24 h-12 rounded-lg bg-gray-100 animate-pulse" />)}
+        </div>
+        <div className="flex flex-col gap-4">
+          {[1,2,3,4].map(n => <IdeaSkeleton key={n} />)}
+        </div>
+      </div>
+    );
   }
 
   return (
     <div>
-      <section className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+      <section className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
         <div>
           <span className="mono-text text-[10px] uppercase tracking-widest text-emerald-600 font-semibold mb-1 block">Campus Governance</span>
           <h2 className="text-4xl font-extrabold tracking-tighter text-[#1a1c1c]">Ideas</h2>
@@ -162,6 +203,30 @@ export default function FeedPage() {
           <Plus className="h-4 w-4" /> New idea
         </Link>
       </section>
+
+      {/* Live stats bar */}
+      {allIdeas.length > 0 && (
+        <div className="flex items-center gap-1 mb-8 overflow-x-auto hide-scrollbar">
+          <div className="flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl border border-gray-100 shadow-sm shrink-0">
+            <Lightbulb className="h-4 w-4 text-amber-500" />
+            <span className="mono-text text-[12px] font-bold text-[#1a1c1c]">{allIdeas.length}</span>
+            <span className="mono-text text-[11px] text-gray-400">idea{allIdeas.length !== 1 ? 's' : ''}</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl border border-gray-100 shadow-sm shrink-0">
+            <Vote className="h-4 w-4 text-emerald-600" />
+            <span className="mono-text text-[12px] font-bold text-[#1a1c1c]">{totalVotes}</span>
+            <span className="mono-text text-[11px] text-gray-400">vote{totalVotes !== 1 ? 's' : ''}</span>
+          </div>
+          {totalVolunteers > 0 && (
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl border border-gray-100 shadow-sm shrink-0">
+              <Users className="h-4 w-4 text-violet-600" />
+              <span className="mono-text text-[12px] font-bold text-[#1a1c1c]">{totalVolunteers}</span>
+              <span className="mono-text text-[11px] text-gray-400">volunteer{totalVolunteers !== 1 ? 's' : ''}</span>
+            </div>
+          )}
+        </div>
+      )}
+
 
       <section className="flex flex-col gap-6 mb-8">
         <div className="flex flex-wrap items-center gap-3">
@@ -242,11 +307,18 @@ export default function FeedPage() {
                     <span className="text-[10px] mono-text text-gray-400">&middot;</span>
                     <span className="text-[10px] mono-text text-gray-400">{formatRelativeDate(idea.createdAt)}</span>
                   </div>
-                  <h3 className="text-base md:text-lg font-semibold text-[#1a1c1c] mb-2 leading-tight group-hover:text-emerald-700 transition-colors">{idea.title}</h3>
+                  <div className="flex items-start gap-2 mb-2">
+                    <h3 className="text-base md:text-lg font-semibold text-[#1a1c1c] leading-tight group-hover:text-emerald-700 transition-colors flex-1">{idea.title}</h3>
+                    {net >= 5 && (
+                      <span className="shrink-0 flex items-center gap-1 px-2 py-0.5 bg-orange-50 text-orange-500 rounded-full border border-orange-100 text-[10px] mono-text font-bold">
+                        <Flame className="h-3 w-3" /> Hot
+                      </span>
+                    )}
+                  </div>
                   <p className="text-gray-500 text-sm line-clamp-2 leading-relaxed mb-3">{idea.body}</p>
                   {idea.volunteerCount > 0 && (
-                    <div className="flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md w-fit">
-                      <Hand className="h-4 w-4" />
+                    <div className="flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md w-fit border border-emerald-100">
+                      <Hand className="h-3.5 w-3.5" />
                       <span className="text-[10px] mono-text font-bold">{idea.volunteerCount} Volunteer{idea.volunteerCount !== 1 ? 's' : ''}</span>
                     </div>
                   )}

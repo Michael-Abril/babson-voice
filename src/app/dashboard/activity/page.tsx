@@ -32,11 +32,12 @@ export default function MyActivityPage() {
   const hasActivity = myVotes.length > 0 || myVolunteers.length > 0;
 
   return (
-    <div className="max-w-[640px] mx-auto">
+    <div className="max-w-[640px] mx-auto animate-fade-in-up">
       {/* Header */}
       <section className="mb-12">
+        <span className="mono-text text-[10px] uppercase tracking-widest text-emerald-600 font-semibold mb-1 block">Your history</span>
         <h1 className="text-4xl font-extrabold tracking-tighter text-[#1a1c1c] mb-2">Activity</h1>
-        <p className="text-gray-500 font-medium">Your votes and volunteer signups.</p>
+        <p className="text-gray-500 text-sm">Your votes and volunteer signups, tied to your session.</p>
       </section>
 
       {!hasActivity && (
