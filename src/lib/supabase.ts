@@ -1,10 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Supports both the Vercel-Supabase marketplace integration
-// (which injects SUPABASE_URL / SUPABASE_ANON_KEY) and manually added
-// NEXT_PUBLIC_* vars. The NEXT_PUBLIC_ prefix is required for browser access.
+// The Vercel-Supabase integration injects NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+// automatically. NEXT_PUBLIC_SUPABASE_URL must be added manually (1 var).
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseAnonKey = (
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+)!;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
