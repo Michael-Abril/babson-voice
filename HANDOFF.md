@@ -143,7 +143,7 @@ Then update the `NEXT_PUBLIC_SITE_URL` environment variable in Vercel to your re
 ## Step 5 — Test It
 
 1. Open the app at your Vercel URL (or custom domain)
-2. Click **Continue with Babson SSO** — log in with your email
+2. Click **Sign in with Babson Email** — enter any `@babson.edu` address
 3. Go to **Submit** — post a test idea
 4. Go back to **Feed** — the idea should appear
 5. Click the upvote/downvote arrows — the count should update
@@ -169,8 +169,8 @@ Once connected, every time you push a change to `main` on GitHub, Vercel automat
 - The database tables don't exist yet. Go to Supabase → SQL Editor and run the SQL from Step 2b.
 - Make sure you also ran the `CREATE POLICY` statements — without them, the anon key can't read or write data.
 
-### Login doesn't work
-- The app uses shared Privy dev credentials for auth. These are included in the app code and work automatically — no setup needed.
+### Login rejects my email
+- Only `@babson.edu` addresses are accepted. The login page validates the domain client-side before saving to localStorage.
 
 ### Custom domain shows "Invalid SSL" or doesn't load
 - DNS hasn't propagated yet. Wait 10–30 minutes and try again.
@@ -184,7 +184,7 @@ Once connected, every time you push a change to `main` on GitHub, Vercel automat
 |-------|---------|------|
 | Hosting | Vercel | Free (Hobby plan) |
 | Database | Supabase | Free (500MB, 50k rows/month) |
-| Auth | Privy (via Varity UI Kit dev credentials) | Free (shared dev quota) |
+| Auth | Babson email validation (localStorage session) | Free |
 | Domain | Your registrar | Whatever you pay for the domain |
 
 The free tiers are more than enough for a Babson-scale app (a few hundred students).

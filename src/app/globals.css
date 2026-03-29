@@ -14,17 +14,17 @@
   --color-primary-800: #065f46;
   --color-primary-900: #064e3b;
 
-  --varity-primary-color: #059669;
-  --varity-bg-primary: #f9f9f9;
-  --varity-bg-sidebar: #ffffff;
-  --varity-bg-header: #ffffff;
-  --varity-bg-footer: #ffffff;
-  --varity-bg-secondary: #f3f3f3;
-  --varity-bg-hover: #ecfdf5;
-  --varity-text-primary: #1a1c1c;
-  --varity-text-secondary: #6b7280;
-  --varity-border-color: #e5e7eb;
-  --varity-accent-color: #ef4444;
+  --bv-primary-color: #059669;
+  --bv-bg-primary: #f9f9f9;
+  --bv-bg-sidebar: #ffffff;
+  --bv-bg-header: #ffffff;
+  --bv-bg-footer: #ffffff;
+  --bv-bg-secondary: #f3f3f3;
+  --bv-bg-hover: #ecfdf5;
+  --bv-text-primary: #1a1c1c;
+  --bv-text-secondary: #6b7280;
+  --bv-border-color: #e5e7eb;
+  --bv-accent-color: #ef4444;
 }
 
 html {

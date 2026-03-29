@@ -89,7 +89,7 @@ function IdeaDetailModal({
 export default function FeedPage() {
   const { data: allIdeas, loading, refresh: refreshIdeas } = useIdeas();
   const { data: allVotes, refresh: refreshVotes } = useAllVotes();
-  const { id: userId, email: userEmail } = useCurrentUser();
+  const { id: userId, email: userEmail, loaded: userLoaded } = useCurrentUser();
   const [sort, setSort] = useState<SortMode>('hot');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null);
@@ -120,7 +120,7 @@ export default function FeedPage() {
   }, [allIdeas, sort, categoryFilter]);
 
   const handleVote = async (ideaId: string, type: 'up' | 'down') => {
-    if (voting) return;
+    if (voting || !userLoaded || userId === 'anon') return;
     setVoting(true);
     try {
       const existing = userVotesMap[ideaId];
@@ -202,13 +202,17 @@ export default function FeedPage() {
                 className="flex bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group overflow-hidden cursor-pointer">
                 <div className="flex flex-col items-center justify-center w-14 bg-gray-50/50 py-4 group-hover:bg-gray-50 transition-colors"
                   onClick={(e) => e.stopPropagation()}>
-                  <button onClick={() => handleVote(idea.id, 'up')}
-                    className={`transition-colors ${uv?.voteType === 'up' ? 'text-emerald-600' : 'text-gray-400 hover:text-emerald-600'}`}>
+                  <button
+                    onClick={() => handleVote(idea.id, 'up')}
+                    disabled={!userLoaded || userId === 'anon'}
+                    className={`transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${uv?.voteType === 'up' ? 'text-emerald-600' : 'text-gray-400 hover:text-emerald-600'}`}>
                     <ChevronUp className="h-6 w-6" />
                   </button>
                   <span className={`mono-text text-sm font-bold my-1 ${net > 0 ? 'text-emerald-700' : net < 0 ? 'text-red-500' : 'text-gray-500'}`}>{net}</span>
-                  <button onClick={() => handleVote(idea.id, 'down')}
-                    className={`transition-colors ${uv?.voteType === 'down' ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}>
+                  <button
+                    onClick={() => handleVote(idea.id, 'down')}
+                    disabled={!userLoaded || userId === 'anon'}
+                    className={`transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${uv?.voteType === 'down' ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}>
                     <ChevronDown className="h-6 w-6" />
                   </button>
                 </div>

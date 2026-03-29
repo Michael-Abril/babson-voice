@@ -18,10 +18,12 @@ async function fetchWithRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1500
 
 export function useCurrentUser() {
   const [email, setEmail] = useState('');
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem('babson-voice-email') || '';
     setEmail(stored);
+    setLoaded(true);
   }, []);
 
   return {
@@ -29,6 +31,7 @@ export function useCurrentUser() {
     email,
     name: email ? email.split('@')[0] : '',
     authenticated: !!email,
+    loaded,
     logout: async () => {
       localStorage.removeItem('babson-voice-email');
     },

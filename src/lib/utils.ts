@@ -30,19 +30,3 @@ export function cn(...classes: (string | false | undefined | null)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
-export function getAppBase(): string {
-  if (typeof window === 'undefined') return '';
-  const path = window.location.pathname;
-  const routes = ['/login', '/dashboard/submit', '/dashboard/activity', '/dashboard'];
-  for (const route of routes) {
-    const idx = path.indexOf(route);
-    if (idx === 0) return '';
-    if (idx > 0) return path.substring(0, idx);
-  }
-  return path.replace(/\/+$/, '');
-}
-
-/** Full page reload -- only use for logout or external redirects */
-export function hardNavigate(absolutePath: string): void {
-  window.location.href = getAppBase() + absolutePath;
-}

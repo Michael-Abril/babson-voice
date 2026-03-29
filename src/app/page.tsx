@@ -55,7 +55,7 @@ export default function HomePage() {
               href="/login/"
               className="h-[44px] bg-[#1a1c1c] text-white rounded-md px-8 text-[15px] font-medium flex items-center justify-center transition-colors hover:bg-[#1a1c1c]/90 active:scale-[0.98]"
             >
-              Continue with Babson SSO
+              Sign in with Babson Email
             </Link>
           </div>
         </main>
@@ -65,7 +65,7 @@ export default function HomePage() {
             href="/login/"
             className="w-full h-[44px] bg-[#1a1c1c] text-white rounded-md text-[15px] font-medium flex items-center justify-center transition-colors hover:bg-[#1a1c1c]/90 active:scale-[0.98]"
           >
-            Continue with Babson SSO
+            Sign in with Babson Email
           </Link>
         </div>
       </div>
