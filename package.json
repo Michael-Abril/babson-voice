@@ -8,12 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:debug": "playwright test --debug",
-    "deploy": "varitykit app deploy"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.100.1",
@@ -26,12 +21,10 @@
     "react-dom": "^18.3.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.58.2",
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.0.0",
-    "husky": "^9.1.7",
     "postcss": "^8.0.0",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.0.0"

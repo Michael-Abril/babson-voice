@@ -2,28 +2,15 @@
 
 An anonymous idea and feedback platform for Babson College students. Submit campus improvement ideas, vote on what matters most, and volunteer to help bring the best ones to life.
 
-[![Built with Varity](https://img.shields.io/badge/built%20with-Varity-7C3AED)](https://www.varity.so)
-
----
-
-## Quick Start
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
 ---
 
 ## What It Does
 
-- **Anonymous idea submission** — students submit campus improvement ideas without revealing their identity
+- **Anonymous idea submission** — post campus improvement ideas without revealing your identity
 - **Community voting** — upvote or downvote ideas; the best ones surface naturally
-- **Volunteer sign-ups** — students can raise their hand to help execute top ideas
-- **Category filtering** — ideas organized by Academics, Campus Life, Dining, Facilities, Clubs, Other
-- **Activity tracking** — each user can view their own votes and volunteer history
+- **Volunteer sign-ups** — raise your hand to help execute top ideas
+- **Category filtering** — Academics, Campus Life, Dining, Facilities, Clubs, Other
+- **Activity tracking** — view your own vote and volunteer history
 
 ---
 
@@ -31,12 +18,48 @@ Open [http://localhost:3000](http://localhost:3000).
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | Next.js 15 (App Router, `output: 'export'`) |
-| Auth | Privy via `@varity-labs/ui-kit` |
-| Database | Varity DB Proxy via `@varity-labs/sdk` |
-| Hosting | IPFS via Varity (`varitykit app deploy`) |
+| Framework | Next.js 15 (App Router) |
+| Auth | Privy (via `@varity-labs/ui-kit`) |
+| Database | Supabase (PostgreSQL) |
+| Hosting | Vercel |
 | Styling | Tailwind CSS |
 | Icons | Lucide React |
+
+---
+
+## Getting Started (Local Development)
+
+### 1. Clone and install
+
+```bash
+git clone https://github.com/Michael-Abril/babson-voice.git
+cd babson-voice
+npm install
+```
+
+### 2. Set up Supabase
+
+1. Create a free project at [supabase.com](https://supabase.com)
+2. Run the table setup SQL from `HANDOFF.md` in the Supabase SQL Editor
+3. Copy your project URL and anon key from **Settings → API**
+
+### 3. Configure environment variables
+
+Create a `.env.local` file in the project root:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+### 4. Run the dev server
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
@@ -46,64 +69,58 @@ Open [http://localhost:3000](http://localhost:3000).
 src/
   app/
     page.tsx                  # Landing page
-    login/page.tsx            # Privy authentication
+    login/page.tsx            # Authentication
     dashboard/
-      layout.tsx              # Auth guard + bottom nav
-      page.tsx                # Idea feed (home)
+      layout.tsx              # Auth guard + bottom navigation
+      page.tsx                # Idea feed
       submit/page.tsx         # Submit a new idea
       activity/page.tsx       # Your votes & volunteer history
+    not-found.tsx             # 404 page
   components/
-    providers.tsx             # ToastProvider wrapper
-    landing/                  # (reserved for future landing sections)
-    shared/                   # (reserved for future shared components)
+    providers.tsx             # Global providers (toast)
   lib/
-    varity.ts                 # SDK db export
-    database.ts               # Typed collections (ideas, votes, volunteers)
+    supabase.ts               # Supabase client + collection wrapper
+    database.ts               # Typed collection accessors
     hooks.ts                  # Data hooks (useIdeas, useVotes, etc.)
-    constants.ts              # App name, nav items, category config
-    utils.ts                  # formatDate, formatRelativeDate, cn, hardNavigate
+    constants.ts              # App config, nav items, category colors
+    utils.ts                  # Date formatting, cn(), hardNavigate()
   types/
-    index.ts                  # Idea, Vote, Volunteer types
+    index.ts                  # Idea, Vote, Volunteer TypeScript types
 ```
 
 ---
 
-## Data Collections
+## Database Schema
 
-| Collection | Purpose |
-|------------|---------|
-| `ideas` | Campus improvement submissions |
-| `votes` | Per-user upvote/downvote records |
-| `volunteers` | Per-user volunteer sign-ups per idea |
-
-All collections are defined in `src/lib/database.ts` and declared in `varity.config.json`.
+| Table | Fields |
+|-------|--------|
+| `ideas` | `id`, `title`, `body`, `category`, `upvotes`, `downvotes`, `volunteerCount`, `createdAt` |
+| `votes` | `id`, `ideaId`, `voterId`, `voteType` (`up`/`down`), `createdAt` |
+| `volunteers` | `id`, `ideaId`, `userId`, `email`, `signedUpAt` |
 
 ---
 
 ## Environment Variables
 
-**Development:** No setup needed. The Varity SDK uses shared dev credentials automatically.
-
-**Production:** Run `varitykit app deploy` — credentials are injected automatically.
-
-| Variable | Notes |
-|----------|-------|
-| `NEXT_PUBLIC_VARITY_APP_TOKEN` | DB auth token (auto-injected by CLI on deploy) |
-| `NEXT_PUBLIC_VARITY_DB_PROXY_URL` | DB proxy URL (auto-injected by CLI on deploy) |
-| `NEXT_PUBLIC_VARITY_APP_ID` | App ID (auto-injected by CLI on deploy) |
+| Variable | Required | Notes |
+|----------|----------|-------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Supabase anon/public key |
+| `NEXT_PUBLIC_SITE_URL` | Recommended | Your domain — used for OG meta tags |
 
 ---
 
 ## Deployment
 
-```bash
-varitykit app deploy
-```
+The app deploys automatically to Vercel on every push to `main`.
 
-Builds the static export, provisions a private database, and deploys to IPFS with a custom Varity gateway URL.
+For a full deployment walkthrough (Supabase setup, Vercel config, custom domain), see [`HANDOFF.md`](./HANDOFF.md).
 
 ---
 
-## Known Platform Issues
+## Contributing
 
-See [`VARITY-TEAM-FEEDBACK.md`](./VARITY-TEAM-FEEDBACK.md) for a detailed developer experience report covering Windows compatibility bugs, credential proxy issues, and DB proxy authentication errors that were encountered during development.
+1. Fork the repo
+2. Create a feature branch (`git checkout -b feature/my-change`)
+3. Commit your changes
+4. Open a pull request against `main`

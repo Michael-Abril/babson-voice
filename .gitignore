@@ -43,3 +43,7 @@ blob-report/
 
 # Turbo build cache
 .turbo/
+
+# Internal / private documents (not for public repo)
+VARITY-TEAM-FEEDBACK.md
+MIGRATION.md
