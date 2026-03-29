@@ -1,11 +1,25 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Providers } from '@/components/providers';
 import './globals.css';
+
+export const viewport: Viewport = {
+  themeColor: '#059669',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   title: 'Babson Voice — Your Ideas, Your Campus',
   description: 'An anonymous platform for Babson students to share ideas, vote on campus improvements, and volunteer to make them happen.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://babson-voice.vercel.app'),
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Babson Voice',
+  },
   openGraph: {
     title: 'Babson Voice — Your Ideas, Your Campus',
     description: 'An anonymous platform for Babson students to share ideas, vote on campus improvements, and volunteer to make them happen.',
@@ -26,7 +40,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body className="antialiased">
         <Providers>{children}</Providers>

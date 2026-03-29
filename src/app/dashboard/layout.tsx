@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Rss, PlusCircle, Bell, User, LogOut } from 'lucide-react';
+import { InstallPrompt } from '@/components/InstallPrompt';
 
 const NAV_ITEMS = [
   { label: 'Feed',     icon: Rss,        path: '/dashboard',          mobileLabel: 'Feed' },
@@ -108,6 +109,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <main className="pt-20 pb-24 md:pb-8 max-w-4xl mx-auto px-4">
         {children}
       </main>
+
+      <InstallPrompt />
 
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 left-0 w-full h-16 bg-white flex justify-around items-center px-4 z-50 border-t border-zinc-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)]">
