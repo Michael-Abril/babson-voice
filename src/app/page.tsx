@@ -49,7 +49,7 @@ const CAMPAIGN_WEEK_EVENTS: {
   {
     day: 'Wednesday',
     date: 'April 1',
-    time: '4-6pm',
+    time: '4:30pm-6pm',
     description: 'Learn about our Build Babson Better platform over drinks & food!',
     rsvpHref: 'https://luma.com/3azm7dqc',
     imageSrc: 'https://i.imgur.com/CVY1odr.jpeg',
@@ -66,8 +66,7 @@ const CAMPAIGN_WEEK_EVENTS: {
     day: 'Friday',
     date: 'April 3',
     time: '6-9pm',
-    description:
-      'Come over for a Build Babson Better BBQ after the annual Holi festivities.',
+    description: 'Join us for a Build Babson Better Potluck!',
     rsvpHref: 'https://luma.com/x28qsi1g',
     imageSrc: 'https://i.imgur.com/mpujAan.jpeg',
   },
@@ -225,17 +224,7 @@ export default function HomePage() {
                   </div>
                   <p className="text-[13px] font-bold text-gray-900 px-2 pt-3 pb-1">{ev.time}</p>
                   <p className="text-[12px] leading-snug text-gray-700 px-3 pb-3 flex-1">
-                    {ev.day === 'Friday' ? (
-                      <>
-                        Come over for a Build Babson Better BBQ after{' '}
-                        <a href={HOLI_ENGAGE_URL} target="_blank" rel="noopener noreferrer" className={engageLinkClass}>
-                          the annual Holi festivities
-                        </a>
-                        .
-                      </>
-                    ) : (
-                      ev.description
-                    )}
+                    {ev.description}
                   </p>
                   <div className="mt-auto border-t border-gray-200 bg-white py-2.5 px-2">
                     {ev.day === 'Monday' ? (
@@ -284,7 +273,7 @@ export default function HomePage() {
                   <p className="flex flex-wrap items-center justify-center gap-2">
                     <Mic className="h-3.5 w-3.5 text-red-600 shrink-0" aria-hidden />
                     <span className="font-medium leading-snug text-center">
-                      Debate Wed Apr 1 · 12-1 PM · Winn Auditorium
+                      Debate Thu Apr 2 · 12-1pm · Winn Auditorium
                     </span>
                   </p>
                   <p className="text-center">
