@@ -7,6 +7,8 @@ import { ArrowRight, Link2, UsersRound, LayoutDashboard, ShieldCheck, Instagram,
 
 const HOLI_ENGAGE_URL = 'https://engage.babson.edu/web/rsvp_boot?id=376170';
 
+const BBQ_HELP_FORM_URL = 'https://forms.office.com/r/JseTq2Q7Bp';
+
 const engageLinkClass =
   'text-emerald-700 underline underline-offset-2 font-medium hover:text-emerald-800 break-words';
 
@@ -212,15 +214,29 @@ export default function HomePage() {
                     {ev.day === 'Monday' ? (
                       <span className="text-[13px] font-semibold text-emerald-800">In Olin Lobby</span>
                     ) : (
-                      <a
-                        href={ev.rsvpHref}
-                        className="text-[13px] font-semibold text-emerald-700 hover:text-emerald-800 underline underline-offset-2"
-                        {...(ev.rsvpHref.startsWith('http')
-                          ? { target: '_blank', rel: 'noopener noreferrer' }
-                          : {})}
-                      >
-                        RSVP
-                      </a>
+                      <div className="flex flex-col gap-2">
+                        <a
+                          href={ev.rsvpHref}
+                          className="text-[13px] font-semibold text-emerald-700 hover:text-emerald-800 underline underline-offset-2"
+                          {...(ev.rsvpHref.startsWith('http')
+                            ? { target: '_blank', rel: 'noopener noreferrer' }
+                            : {})}
+                        >
+                          RSVP
+                        </a>
+
+                        {ev.day === 'Friday' && (
+                          <a
+                            href={BBQ_HELP_FORM_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-[12.5px] font-semibold text-emerald-800 shadow-sm hover:bg-emerald-100 hover:border-emerald-300 transition-colors"
+                          >
+                            <UsersRound className="h-4 w-4 shrink-0" aria-hidden />
+                            Help host / sponsor / organize
+                          </a>
+                        )}
+                      </div>
                     )}
                   </div>
                 </article>
@@ -229,27 +245,44 @@ export default function HomePage() {
           </section>
 
           <div className="md:text-center md:max-w-2xl md:mx-auto w-full mt-4">
-            <div className="flex flex-col gap-2 text-[13px] text-gray-500 md:items-center md:max-w-lg md:mx-auto">
-              <p className="flex flex-wrap items-center gap-x-2 gap-y-1 md:justify-center">
-                <span className="inline-flex items-center gap-1 text-gray-700 font-medium">
-                  <Mic className="h-3.5 w-3.5 text-emerald-600 shrink-0" aria-hidden />
-                  Debate Wed Apr 1 · 12-1 PM · Winn Auditorium
-                </span>
-              </p>
-              <p>
-                Voting <span className="text-gray-700 font-medium">Mon Apr 6 to Wed Apr 8</span>
-              </p>
-              <p className="text-[13px] md:text-[14px]">
+            <div className="flex flex-col gap-3 text-[13px] md:items-center md:max-w-lg md:mx-auto">
+              <div
+                className="w-full max-w-md md:mx-auto rounded-xl border border-red-200 bg-gradient-to-br from-red-50/95 to-white px-4 py-3.5 text-center shadow-sm ring-1 ring-red-900/5"
+                role="note"
+              >
+                <p className="text-[12px] font-bold uppercase tracking-wide text-red-800 mb-3">
+                  Key Dates:
+                </p>
+                <div className="flex flex-col gap-2 text-[13px] text-gray-800">
+                  <p className="flex flex-wrap items-center justify-center gap-2">
+                    <Mic className="h-3.5 w-3.5 text-red-600 shrink-0" aria-hidden />
+                    <span className="font-medium leading-snug text-center">
+                      Debate Wed Apr 1 · 12-1 PM · Winn Auditorium
+                    </span>
+                  </p>
+                  <p className="text-center">
+                    Voting{' '}
+                    <span className="font-semibold text-gray-900">Mon Apr 6 to Wed Apr 8</span>
+                  </p>
+                </div>
+              </div>
+              <div
+                className="w-full max-w-md md:mx-auto mt-1 rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50/95 to-white px-4 py-3.5 text-center shadow-sm ring-1 ring-emerald-900/5"
+                role="note"
+              >
+                <p className="text-[12px] font-bold uppercase tracking-wide text-emerald-800 mb-2">
+                  Follow us on Instagram
+                </p>
                 <a
                   href="https://instagram.com/buildbabsonbetter"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-emerald-700 font-semibold hover:text-emerald-800 underline underline-offset-2"
+                  className="inline-flex items-center justify-center gap-2 text-[13px] md:text-[14px] font-semibold text-emerald-700 hover:text-emerald-800 underline underline-offset-2"
                 >
                   <Instagram className="h-4 w-4 shrink-0" aria-hidden />
                   @buildbabsonbetter
                 </a>
-              </p>
+              </div>
             </div>
           </div>
 
