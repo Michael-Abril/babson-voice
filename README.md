@@ -1,5 +1,7 @@
 # Babson Voice
 
+**Live at [www.buildbabsonbetter.com](https://www.buildbabsonbetter.com)**
+
 An anonymous idea and feedback platform for Babson College students. Submit campus improvement ideas, vote on what matters most, and volunteer to help bring the best ones to life.
 
 ---
@@ -19,7 +21,7 @@ An anonymous idea and feedback platform for Babson College students. Submit camp
 | Layer | Technology |
 |-------|-----------|
 | Framework | Next.js 15 (App Router) |
-| Auth | Privy (via `@varity-labs/ui-kit`) |
+| Auth | Babson email login (localStorage session) |
 | Database | Supabase (PostgreSQL) |
 | Hosting | Vercel |
 | Styling | Tailwind CSS |
