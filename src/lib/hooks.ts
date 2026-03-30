@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { ideas, votes, volunteers } from './database';
-import type { Idea, Vote, Volunteer } from '../types';
+import { ideas, volunteers } from './database';
+import { supabase } from './supabase';
+import type { Idea, Volunteer } from '../types';
 
 async function fetchWithRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1500): Promise<T> {
   for (let i = 0; i < retries; i++) {
@@ -82,16 +83,20 @@ export function useIdeas() {
 // --- Votes ---
 
 export function useVotes(userId: string) {
-  const [data, setData] = useState<Vote[]>([]);
+  const [data, setData] = useState<{ id: string; ideaId: string; voteType: string; createdAt: string }[]>([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
+    if (!userId || userId === 'anon') { setLoading(false); return; }
     try {
       setLoading(true);
-      const result = await fetchWithRetry(() => votes().get());
-      setData((result as Vote[]).filter((v) => v.voterId === userId));
+      const { data: rows } = await supabase
+        .from('votes')
+        .select('id, ideaId, voteType, createdAt')
+        .eq('voterId', userId);
+      setData(rows ?? []);
     } catch {
-      // Silently fail — votes are non-critical for display
+      // non-critical
     } finally {
       setLoading(false);
     }
@@ -103,14 +108,16 @@ export function useVotes(userId: string) {
 }
 
 export function useAllVotes() {
-  const [data, setData] = useState<Vote[]>([]);
+  const [data, setData] = useState<{ id: string; ideaId: string; voterId: string; voteType: string }[]>([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await fetchWithRetry(() => votes().get());
-      setData(result as Vote[]);
+      const { data: rows } = await supabase
+        .from('votes')
+        .select('id, ideaId, voterId, voteType');
+      setData(rows ?? []);
     } catch {
       // silent
     } finally {
@@ -123,36 +130,42 @@ export function useAllVotes() {
   return { data, loading, refresh };
 }
 
-export async function castVote(
-  userId: string,
-  ideaId: string,
-  voteType: 'up' | 'down',
-) {
-  // Delete ALL existing votes by this user on this idea before inserting.
-  // This guarantees one-vote-per-user even if stale duplicates exist in DB.
-  const allVotes = await votes().get() as Vote[];
-  const existing = allVotes.filter((v) => v.ideaId === ideaId && v.voterId === userId);
-  await Promise.all(existing.map((v) => votes().delete(v.id)));
+// Delete any existing vote this user has on this idea (server-side), then insert fresh.
+export async function castVote(userId: string, ideaId: string, voteType: 'up' | 'down') {
+  const { error: delErr } = await supabase
+    .from('votes')
+    .delete()
+    .eq('ideaId', ideaId)
+    .eq('voterId', userId);
+  if (delErr) throw new Error(delErr.message);
 
-  await votes().add({
-    ideaId,
-    voterId: userId,
-    voteType,
-    createdAt: new Date().toISOString(),
-  } as any);
+  const { error: insErr } = await supabase
+    .from('votes')
+    .insert({ ideaId, voterId: userId, voteType, createdAt: new Date().toISOString() });
+  if (insErr) throw new Error(insErr.message);
 }
 
-export async function removeVote(voteId: string) {
-  await votes().delete(voteId);
+// Remove a specific vote by id.
+export async function removeVote(userId: string, ideaId: string) {
+  const { error } = await supabase
+    .from('votes')
+    .delete()
+    .eq('ideaId', ideaId)
+    .eq('voterId', userId);
+  if (error) throw new Error(error.message);
 }
 
-// --- Recalculate idea vote counts ---
+// --- Recalculate idea vote counts (server-side count — never stale) ---
 
 export async function recalculateIdeaVotes(ideaId: string) {
-  const allVotes = await votes().get() as Vote[];
-  const ideaVotes = allVotes.filter((v) => v.ideaId === ideaId);
-  const upvotes = ideaVotes.filter((v) => v.voteType === 'up').length;
-  const downvotes = ideaVotes.filter((v) => v.voteType === 'down').length;
+  const { data: rows, error } = await supabase
+    .from('votes')
+    .select('voteType')
+    .eq('ideaId', ideaId);
+  if (error) throw new Error(error.message);
+
+  const upvotes   = (rows ?? []).filter((v) => v.voteType === 'up').length;
+  const downvotes = (rows ?? []).filter((v) => v.voteType === 'down').length;
   await ideas().update(ideaId, { upvotes, downvotes } as any);
 }
 

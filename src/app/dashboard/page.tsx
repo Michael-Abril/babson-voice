@@ -7,7 +7,9 @@ import { useIdeas, useAllVotes, useCurrentUser, castVote, removeVote, recalculat
 import { CATEGORY_OPTIONS, CATEGORY_COLORS } from '@/lib/constants';
 import { formatRelativeDate } from '@/lib/utils';
 import { ChevronUp, ChevronDown, Plus, Hand, X, Flame, MessageSquare, Users, TrendingUp, Lightbulb } from 'lucide-react';
-import type { Idea, Vote } from '@/types';
+import type { Idea } from '@/types';
+
+type UserVote = { id: string; ideaId: string; voteType: string };
 
 type SortMode = 'hot' | 'new' | 'top';
 
@@ -36,7 +38,7 @@ function IdeaSkeleton() {
 function IdeaDetailModal({
   idea, userVote, userId, userEmail, onVote, onClose,
 }: {
-  idea: Idea; userVote: Vote | undefined; userId: string; userEmail: string;
+  idea: Idea; userVote: UserVote | undefined; userId: string; userEmail: string;
   onVote: (ideaId: string, type: 'up' | 'down') => void; onClose: () => void;
 }) {
   const { data: vols, refresh: refreshVols } = useVolunteers(idea.id);
@@ -134,10 +136,10 @@ export default function FeedPage() {
   const [voteError, setVoteError] = useState('');
 
   const userVotesMap = useMemo(() => {
-    const map: Record<string, Vote> = {};
-    for (const v of allVotes) { if (v.voterId === userId) map[v.ideaId] = v; }
+    const map: Record<string, UserVote> = {};
+    for (const v of allVotes) { map[v.ideaId] = v; }
     return map;
-  }, [allVotes, userId]);
+  }, [allVotes]);
 
   const filtered = useMemo(() => {
     let items = categoryFilter === 'all' ? allIdeas : allIdeas.filter((i) => i.category === categoryFilter);
@@ -163,11 +165,11 @@ export default function FeedPage() {
     setVoteError('');
     try {
       const existing = userVotesMap[ideaId];
-      // Tapping the same direction again = remove vote (toggle off)
       if (existing && existing.voteType === type) {
-        await removeVote(existing.id);
+        // Same direction tapped again → remove vote (toggle off)
+        await removeVote(userId, ideaId);
       } else {
-        // castVote now deletes ALL existing votes for this user+idea before inserting
+        // New direction or switching direction → delete old + insert new (server-side)
         await castVote(userId, ideaId, type);
       }
       await recalculateIdeaVotes(ideaId);
