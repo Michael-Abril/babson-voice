@@ -125,12 +125,17 @@ const features: {
 const GSC_CALENDAR_EMBED_SRC =
   'https://miro.com/app/live-embed/uXjVGqVPD-Q=/?focusWidget=3458764665716147808&embedMode=view_only_without_ui&embedId=514690704532';
 
+/** YouTube Short: https://youtube.com/shorts/HTOVLXLoYgc */
+const STUDENT_VOICE_DASHBOARD_DEMO_EMBED_SRC =
+  'https://www.youtube.com/embed/HTOVLXLoYgc?rel=0';
+
 const CONTACT_EMAIL = 'rlee5@babson.edu';
 const CONTACT_EMAIL_SUBJECT = 'Build Babson Better Campaign: Get In Touch!';
 
 export default function HomePage() {
   const [gscCalendarOpen, setGscCalendarOpen] = useState(false);
   const [contactEmailOpen, setContactEmailOpen] = useState(false);
+  const [dashboardDemoOpen, setDashboardDemoOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-white">
@@ -406,6 +411,39 @@ export default function HomePage() {
                           </li>
                         ))}
                       </ul>
+                      {f.kicker === '03 · Build Babson Better' && (
+                        <div className="mt-4 w-full border-t border-gray-100 pt-4">
+                          <button
+                            type="button"
+                            aria-expanded={dashboardDemoOpen}
+                            aria-controls="student-voice-dashboard-demo"
+                            onClick={() => setDashboardDemoOpen((o) => !o)}
+                            className="inline-flex w-full max-w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-violet-800 hover:text-violet-900"
+                          >
+                            <span>See Student Voice Dashboard in action</span>
+                            <ChevronDown
+                              className={`h-4 w-4 shrink-0 transition-transform ${dashboardDemoOpen ? 'rotate-180' : ''}`}
+                              aria-hidden
+                            />
+                          </button>
+                          {dashboardDemoOpen && (
+                            <div
+                              id="student-voice-dashboard-demo"
+                              className="mt-3 w-full overflow-hidden rounded-lg border border-gray-200 bg-black shadow-sm"
+                            >
+                              <div className="relative mx-auto aspect-[9/16] w-full max-w-[280px]">
+                                <iframe
+                                  title="Student Voice Dashboard in action"
+                                  src={STUDENT_VOICE_DASHBOARD_DEMO_EMBED_SRC}
+                                  className="absolute inset-0 h-full w-full"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                  allowFullScreen
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
