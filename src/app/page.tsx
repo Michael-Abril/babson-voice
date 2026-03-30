@@ -1,32 +1,53 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Link2, UsersRound, Hammer, ShieldCheck, Instagram } from 'lucide-react';
+import { ArrowRight, Link2, UsersRound, LayoutDashboard, ShieldCheck, Instagram, Mic } from 'lucide-react';
 
-const features = [
+const features: {
+  icon: typeof Link2;
+  color: string;
+  kicker: string;
+  title: string;
+  bullets: string[];
+}[] = [
   {
     icon: Link2,
     color: 'bg-amber-50 text-amber-500',
-    kicker: 'Connect the dots',
-    title: 'Put ideas on the record',
-    description:
-      'Career access, cross-program community, academics, dining, facilities — say what you need. Anonymous posts; real signal for GSC and class reps.',
+    kicker: '01 · Connect the Dots',
+    title: 'Career access that fits how you work',
+    bullets: [
+      'Sector-specific alumni intros and startup-oriented programming, not another generic panel',
+      'Babson Bridge alumni speaker series (entrepreneurship-first, intros built in)',
+      'Shared Alumni Warm-Intro Directory: searchable by industry, open to all grad students',
+      'GSC International Student Networking Track for students building networks from scratch',
+      'Work with GradCCD to shift generic career events toward warm-intro, industry-specific sessions',
+    ],
   },
   {
     icon: UsersRound,
     color: 'bg-emerald-50 text-emerald-600',
-    kicker: 'One GSC',
-    title: 'Every program, one table',
-    description:
-      'FY, EY, Miami, MSBA, MSF, MSEL, part-time — if you are a Babson grad student, this is your lane. No silos in the feed.',
+    kicker: '02 · One GSC',
+    title: 'No silos: communicate, connect, include',
+    bullets: [
+      'One cross-program social per semester (BBQ model, already proven)',
+      'GSC Open Hours: any student, any program, no appointment',
+      'Communication Charter: advance notice on events, dietary accommodations proactively included',
+      'Consistent WhatsApp + email channels so no one misses what matters',
+    ],
   },
   {
-    icon: Hammer,
+    icon: LayoutDashboard,
     color: 'bg-violet-50 text-violet-600',
-    kicker: 'Build Babson Better',
-    title: 'Vote, volunteer, follow through',
-    description:
-      'Upvote what matters, pass on what does not, and raise your hand to help execute. Student voice that turns into action — not another survey.',
+    kicker: '03 · Build Babson Better',
+    title: 'Student Voice Dashboard: accountability, not silence',
+    bullets: [
+      'Close the gap between what Babson promises and what you experience. This feed carries that same energy',
+      'Launch a live Student Voice Dashboard: class-rep issues logged with owner + resolution status',
+      '48-hour advance-notice standard for Canvas pre-work, pushed through GSC channels',
+      'Monthly Venture Meetups: informal pitch nights, GSC-backed, open to all programs',
+      'Advocate for a GSC-backed student venture seed fund',
+    ],
   },
 ];
 
@@ -55,70 +76,112 @@ export default function HomePage() {
         </header>
 
         {/* Hero */}
-        <main className="flex-1 flex flex-col px-6 pt-10 pb-[110px] md:items-center md:pt-20 md:pb-32 md:px-8">
+        <main className="flex-1 flex flex-col px-6 pt-10 pb-[120px] md:items-center md:pt-20 md:pb-32 md:px-8">
 
           {/* Badge */}
-          <div className="inline-flex flex-wrap items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-full text-[11px] font-semibold mb-5 mono-text uppercase tracking-widest w-fit">
-            <ShieldCheck className="h-3 w-3 shrink-0" />
+          <div className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 md:px-4 md:py-2 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-full text-[13px] md:text-[14px] font-semibold mb-5 mono-text uppercase tracking-wide md:tracking-wider w-fit">
+            <ShieldCheck className="h-4 w-4 shrink-0" aria-hidden />
             <span>Ryan Lee for GSC President · MBA &apos;27</span>
           </div>
 
           {/* Headline */}
           <div className="md:text-center md:max-w-2xl">
             <p className="text-emerald-700 text-[13px] font-semibold tracking-wide uppercase mb-3 md:mb-4">
-              Already at work — and already listening.
+              Done with the talking. Here to build.
             </p>
-            <h1 className="text-[#0f1f1a] tracking-tight text-[34px] font-extrabold leading-[1.08] md:text-[56px]">
-              Build Babson Better.<br />
-              <span className="text-emerald-600">Brings People to the Table.</span>
+            <h1 className="text-[#0f1f1a] tracking-tight text-[32px] font-extrabold leading-[1.08] md:text-[52px]">
+              Build Babson Better.
             </h1>
+            <p className="mt-4 text-emerald-700 text-[17px] md:text-xl font-semibold leading-snug md:max-w-xl md:mx-auto">
+              Bringing Everyone to the Table<span className="text-emerald-600/90"> & </span>
+              <span className="block sm:inline">Cooking up a Babson Experience for YOU.</span>
+            </p>
+            <div className="relative mt-6 w-full max-w-[min(100%,420px)] md:max-w-xl md:mx-auto aspect-[4/3] rounded-xl overflow-hidden border border-gray-100 shadow-md ring-1 ring-black/5">
+              <Image
+                src="https://i.imgur.com/1uBxjoA.jpeg"
+                alt="Ryan Lee, Build Babson Better campaign"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 672px"
+                priority
+              />
+            </div>
             <p className="mt-5 text-gray-500 text-[15px] leading-relaxed md:text-lg md:max-w-xl md:mx-auto">
-              Enough with the talking — let&apos;s put graduate student ideas where they can&apos;t be ignored. Pitch anonymously, vote on what matters, and volunteer to help make it real.
+              We&apos;re at Babson for a short time. One moment to make this year count. Every program connected, every student seen, feedback that turns into action. Pitch ideas anonymously, vote, and volunteer here; it&apos;s the same energy as the{' '}
+              <span className="text-gray-700 font-medium">GSC Student Voice Dashboard</span> Ryan&apos;s committed to launching Day 1.
             </p>
-            <p className="mt-3 text-gray-400 text-[13px] leading-snug md:max-w-lg md:mx-auto">
-              GSC election voting <span className="text-gray-600 font-medium">April 4–6</span>
-              {' · '}
-              <a
-                href="https://instagram.com/buildbabsonbetter"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-emerald-700 font-medium hover:text-emerald-800 underline underline-offset-2"
-              >
-                <Instagram className="h-3.5 w-3.5" aria-hidden />
-                @buildbabsonbetter
-              </a>
-            </p>
+            <div className="mt-4 flex flex-col gap-2 text-[13px] text-gray-500 md:items-center md:max-w-lg md:mx-auto">
+              <p className="flex flex-wrap items-center gap-x-2 gap-y-1 md:justify-center">
+                <span className="inline-flex items-center gap-1 text-gray-700 font-medium">
+                  <Mic className="h-3.5 w-3.5 text-emerald-600 shrink-0" aria-hidden />
+                  Debate Wed Apr 1 · 12-1 PM · Winn Auditorium
+                </span>
+              </p>
+              <p>
+                Voting <span className="text-gray-700 font-medium">Mon Apr 6 to Wed Apr 8</span>
+                <span className="text-gray-400"> · </span>
+                No campaigning Sun Apr 5
+              </p>
+              <p>
+                <a
+                  href="https://instagram.com/buildbabsonbetter"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-emerald-700 font-medium hover:text-emerald-800 underline underline-offset-2"
+                >
+                  <Instagram className="h-3.5 w-3.5" aria-hidden />
+                  @buildbabsonbetter
+                </a>
+                <span className="text-gray-400"> · </span>
+                Campaign week Mar 30 to Apr 3 · RSVP &amp; stops via posts
+              </p>
+            </div>
           </div>
 
-          {/* Feature cards */}
-          <div className="flex flex-col gap-3 mt-10 w-full md:grid md:grid-cols-3 md:gap-5 md:max-w-3xl md:mt-14">
-            {features.map((f) => {
-              const [bgColor, textColor] = f.color.split(' ');
-              return (
-                <div
-                  key={f.title}
-                  className="flex items-start gap-4 bg-white rounded-xl border border-gray-100 shadow-sm p-5 md:flex-col hover:shadow-md hover:border-gray-200 transition-all"
-                >
-                  <div className={`flex items-center justify-center rounded-xl shrink-0 size-10 ${bgColor}`}>
-                    <f.icon className={`h-5 w-5 ${textColor}`} />
+          {/* Campaign promises */}
+          <section className="w-full mt-10 md:mt-14 md:max-w-5xl md:mx-auto">
+            <h2 className="text-[#0f1f1a] text-[22px] font-bold tracking-tight md:text-2xl md:text-center">
+              Three Campaign Promises
+            </h2>
+            <div className="flex flex-col gap-3 mt-6 w-full md:grid md:grid-cols-3 md:gap-5 md:max-w-3xl md:mx-auto">
+              {features.map((f) => {
+                const [bgColor, textColor] = f.color.split(' ');
+                return (
+                  <div
+                    key={f.kicker}
+                    className="flex flex-col items-center bg-white rounded-xl border border-gray-100 shadow-sm p-5 md:p-6 hover:shadow-md hover:border-gray-200 transition-all"
+                  >
+                    <div className={`flex items-center justify-center rounded-xl shrink-0 size-14 ${bgColor}`}>
+                      <f.icon className={`h-7 w-7 ${textColor}`} />
+                    </div>
+                    <div className="mt-4 w-full min-w-0">
+                      <p className="mono-text text-[13px] md:text-sm font-bold uppercase tracking-wider text-emerald-700 text-center mb-2">
+                        {f.kicker}
+                      </p>
+                      <p className="text-[#1a1c1c] text-[14px] font-semibold leading-tight mb-2 text-center">
+                        {f.title}
+                      </p>
+                      <ul className="text-gray-500 text-[13px] leading-snug space-y-1.5 list-disc pl-4 marker:text-emerald-600 text-left">
+                        {f.bullets.map((line) => (
+                          <li key={line} className="pl-0.5">
+                            {line}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  <div>
-                    <p className="mono-text text-[10px] font-bold uppercase tracking-wider text-emerald-700/90 mb-1">{f.kicker}</p>
-                    <p className="text-[#1a1c1c] text-[14px] font-semibold leading-tight mb-1">{f.title}</p>
-                    <p className="text-gray-500 text-[13px] leading-snug">{f.description}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          </section>
 
           {/* Desktop CTA */}
           <div className="hidden md:flex mt-12 flex-col sm:flex-row sm:items-center gap-3">
             <Link
               href="/login/"
-              className="h-[48px] bg-emerald-600 text-white rounded-xl px-8 text-[15px] font-semibold inline-flex items-center justify-center gap-2 hover:bg-emerald-700 transition-colors active:scale-[0.98] shadow-lg shadow-emerald-100 w-fit"
+              className="min-h-[48px] py-3 px-6 bg-emerald-600 text-white rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2 hover:bg-emerald-700 transition-colors active:scale-[0.98] shadow-lg shadow-emerald-100 w-fit max-w-xl text-center leading-snug"
             >
-              Join with Babson Email <ArrowRight className="h-4 w-4" />
+              Add Idea to Student Voice Dashboard <ArrowRight className="h-4 w-4 shrink-0" />
             </Link>
             <p className="text-xs text-gray-400 mono-text">@babson.edu · no password · posts stay anonymous</p>
           </div>
@@ -128,11 +191,11 @@ export default function HomePage() {
         <div className="fixed bottom-0 left-0 w-full px-5 pt-4 pb-6 bg-white/95 backdrop-blur-sm border-t border-gray-100 md:hidden z-50 shadow-[0_-8px_20px_-4px_rgba(0,0,0,0.06)]">
           <Link
             href="/login/"
-            className="w-full h-[50px] bg-emerald-600 text-white rounded-xl text-[15px] font-semibold flex items-center justify-center gap-2 hover:bg-emerald-700 transition-colors active:scale-[0.98]"
+            className="w-full min-h-[52px] py-3 px-3 bg-emerald-600 text-white rounded-xl text-[13px] font-semibold leading-tight flex items-center justify-center gap-2 hover:bg-emerald-700 transition-colors active:scale-[0.98] text-center"
           >
-            Join with Babson Email <ArrowRight className="h-4 w-4" />
+            Add Idea to Student Voice Dashboard <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
           </Link>
-          <p className="text-center text-[11px] text-gray-400 mono-text mt-2">@babson.edu · anonymous · vote Apr 4–6</p>
+          <p className="text-center text-xs text-gray-400 mono-text mt-2">@babson.edu · no password · posts stay anonymous</p>
         </div>
       </div>
     </div>
