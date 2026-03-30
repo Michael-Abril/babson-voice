@@ -2,7 +2,13 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { ArrowRight, Link2, UsersRound, LayoutDashboard, ShieldCheck, Instagram, Mic } from 'lucide-react';
+
+const HOLI_ENGAGE_URL = 'https://engage.babson.edu/web/rsvp_boot?id=376170';
+
+const engageLinkClass =
+  'text-emerald-700 underline underline-offset-2 font-medium hover:text-emerald-800 break-words';
 
 const CAMPAIGN_WEEK_EVENTS: {
   day: string;
@@ -48,7 +54,8 @@ const CAMPAIGN_WEEK_EVENTS: {
     day: 'Friday',
     date: 'April 3',
     time: '6-9pm',
-    description: 'Come over for a Build Babson Better BBQ after the Holi festivities.',
+    description:
+      'Come over for a Build Babson Better BBQ after the annual Holi festivities.',
     rsvpHref: 'https://luma.com/x28qsi1g',
     imageSrc: 'https://i.imgur.com/mpujAan.jpeg',
   },
@@ -59,7 +66,7 @@ const features: {
   color: string;
   kicker: string;
   title: string;
-  bullets: string[];
+  bullets: (string | ReactNode)[];
 }[] = [
   {
     icon: Link2,
@@ -79,7 +86,14 @@ const features: {
     title: 'No silos and one connected student body',
     bullets: [
       'Host regular cross-program socials and mixers (e.g. Biweekly Rogers Pub Mixers, GSC BBQs, etc.)',
-      'GSC Open Hours: any student, any program, no appointment',
+      (
+        <>
+          Cross-Cultural Events Calendar: See upcoming cultural events hosted by the greater Babson community like our annual{' '}
+          <a href={HOLI_ENGAGE_URL} target="_blank" rel="noopener noreferrer" className={engageLinkClass}>
+            Holi Celebration
+          </a>
+        </>
+      ),
       'Consistent WhatsApp + email channels so no one misses what matters',
     ],
   },
@@ -89,8 +103,9 @@ const features: {
     kicker: '03 · Build Babson Better',
     title: 'A Student Voice Dashboard that tracks your feedback',
     bullets: [
+      'Submit your ideas and feedback anonymously and upvote what you want to see',
+      'Pledge to volunteer for an idea and see how many people want to support an initiative',
       'Close the gap between what Babson promises and what you experience',
-      'Submit your ideas and feedback and upvote what you want to see',
     ],
   },
 ];
@@ -180,7 +195,19 @@ export default function HomePage() {
                     />
                   </div>
                   <p className="text-[13px] font-bold text-gray-900 px-2 pt-3 pb-1">{ev.time}</p>
-                  <p className="text-[12px] leading-snug text-gray-700 px-3 pb-3 flex-1">{ev.description}</p>
+                  <p className="text-[12px] leading-snug text-gray-700 px-3 pb-3 flex-1">
+                    {ev.day === 'Friday' ? (
+                      <>
+                        Come over for a Build Babson Better BBQ after{' '}
+                        <a href={HOLI_ENGAGE_URL} target="_blank" rel="noopener noreferrer" className={engageLinkClass}>
+                          the annual Holi festivities
+                        </a>
+                        .
+                      </>
+                    ) : (
+                      ev.description
+                    )}
+                  </p>
                   <div className="mt-auto border-t border-gray-200 bg-white py-2.5 px-2">
                     {ev.day === 'Monday' ? (
                       <span className="text-[13px] font-semibold text-emerald-800">In Olin Lobby</span>
@@ -250,8 +277,8 @@ export default function HomePage() {
                         {f.title}
                       </p>
                       <ul className="text-gray-500 text-[13px] leading-snug space-y-1.5 list-disc pl-4 marker:text-emerald-600 text-left">
-                        {f.bullets.map((line) => (
-                          <li key={line} className="pl-0.5">
+                        {f.bullets.map((line, i) => (
+                          <li key={typeof line === 'string' ? line : `${f.kicker}-${i}`} className="pl-0.5">
                             {line}
                           </li>
                         ))}
@@ -273,6 +300,12 @@ export default function HomePage() {
             </Link>
             <p className="text-xs text-gray-400 mono-text">@babson.edu · no password · posts stay anonymous</p>
           </div>
+
+          <blockquote className="mt-12 md:mt-16 w-full max-w-2xl mx-auto rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50/90 to-white px-6 py-7 md:px-10 md:py-8 shadow-sm ring-1 ring-emerald-900/5">
+            <p className="text-center text-[#1a2e24] text-[17px] md:text-[20px] leading-snug font-medium italic tracking-tight">
+              Ask not what Babson can do for you, ask what you can do for Babson.
+            </p>
+          </blockquote>
         </main>
 
         {/* Mobile bottom CTA */}
