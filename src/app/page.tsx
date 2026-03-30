@@ -2,8 +2,18 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import type { ReactNode } from 'react';
-import { ArrowRight, Link2, UsersRound, LayoutDashboard, ShieldCheck, Instagram, Mic } from 'lucide-react';
+import { useState, type ReactNode } from 'react';
+import {
+  ArrowRight,
+  Link2,
+  UsersRound,
+  LayoutDashboard,
+  ShieldCheck,
+  Instagram,
+  Mic,
+  ChevronDown,
+  Mail,
+} from 'lucide-react';
 
 const HOLI_ENGAGE_URL = 'https://engage.babson.edu/web/rsvp_boot?id=376170';
 
@@ -112,7 +122,16 @@ const features: {
   },
 ];
 
+const GSC_CALENDAR_EMBED_SRC =
+  'https://miro.com/app/live-embed/uXjVGqVPD-Q=/?focusWidget=3458764665716147808&embedMode=view_only_without_ui&embedId=514690704532';
+
+const CONTACT_EMAIL = 'rlee5@babson.edu';
+const CONTACT_EMAIL_SUBJECT = 'Build Babson Better Campaign: Get In Touch!';
+
 export default function HomePage() {
+  const [gscCalendarOpen, setGscCalendarOpen] = useState(false);
+  const [contactEmailOpen, setContactEmailOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Gradient backdrop */}
@@ -165,7 +184,10 @@ export default function HomePage() {
               />
             </div>
             <p className="mt-5 text-gray-500 text-[15px] leading-relaxed md:text-lg md:max-w-xl md:mx-auto">
-              We&apos;re at Babson for a short time. One moment to make this year count. Let&apos;s Build a Better Babson together that we can be proud of looking back at our time here.
+              We&apos;re at Babson for a short time. One moment to make this year count. Let&apos;s{' '}
+              <span className="font-bold text-emerald-600">Build a Better Babson</span>
+              {' '}
+              together that we can be proud of looking back at our time here come Commencement 🎉
             </p>
             <h2 className="text-[#0f1f1a] text-[22px] font-bold tracking-tight md:text-2xl text-center mt-5 md:max-w-xl md:mx-auto">
               Join my upcoming events to learn more!
@@ -264,6 +286,42 @@ export default function HomePage() {
                     Voting{' '}
                     <span className="font-semibold text-gray-900">Mon Apr 6 to Wed Apr 8</span>
                   </p>
+                  <div className="w-full">
+                    <button
+                      type="button"
+                      id="gsc-calendar-toggle"
+                      aria-expanded={gscCalendarOpen}
+                      aria-controls="gsc-calendar-embed"
+                      onClick={() => setGscCalendarOpen((o) => !o)}
+                      className="mt-2 inline-flex w-full max-w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-red-800 hover:text-red-900"
+                    >
+                      <span>See Proposed April 2026 GSC Calendar</span>
+                      <ChevronDown
+                        className={`h-4 w-4 shrink-0 transition-transform ${gscCalendarOpen ? 'rotate-180' : ''}`}
+                        aria-hidden
+                      />
+                    </button>
+                    {gscCalendarOpen && (
+                      <div
+                        id="gsc-calendar-embed"
+                        className="mt-3 w-full overflow-hidden rounded-lg border border-red-200/80 bg-white shadow-sm"
+                      >
+                        <div className="relative w-full" style={{ paddingBottom: '64.58%' }}>
+                          <iframe
+                            title="Proposed April 2026 GSC Calendar"
+                            src={GSC_CALENDAR_EMBED_SRC}
+                            className="absolute left-0 top-0 h-full w-full"
+                            width={768}
+                            height={496}
+                            frameBorder={0}
+                            scrolling="no"
+                            allow="fullscreen; clipboard-read; clipboard-write"
+                            allowFullScreen
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
               <div
@@ -282,6 +340,38 @@ export default function HomePage() {
                   <Instagram className="h-4 w-4 shrink-0" aria-hidden />
                   @buildbabsonbetter
                 </a>
+                <div className="mt-4 w-full border-t border-emerald-200/80 pt-4">
+                  <p className="text-[12px] font-bold uppercase tracking-wide text-emerald-800 mb-2">
+                    Get In Touch With Me
+                  </p>
+                  <button
+                    type="button"
+                    aria-expanded={contactEmailOpen}
+                    aria-controls="contact-email-reveal"
+                    onClick={() => setContactEmailOpen((o) => !o)}
+                    className="inline-flex w-full max-w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-emerald-800 hover:text-emerald-900"
+                  >
+                    <span>rlee5[at]babson.edu</span>
+                    <ChevronDown
+                      className={`h-4 w-4 shrink-0 transition-transform ${contactEmailOpen ? 'rotate-180' : ''}`}
+                      aria-hidden
+                    />
+                  </button>
+                  {contactEmailOpen && (
+                    <div
+                      id="contact-email-reveal"
+                      className="mt-3 flex justify-center"
+                    >
+                      <a
+                        href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(CONTACT_EMAIL_SUBJECT)}`}
+                        className="inline-flex items-center justify-center gap-2 break-all rounded-lg border border-emerald-200 bg-white px-3 py-2 text-[13px] font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50/80"
+                      >
+                        <Mail className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden />
+                        {CONTACT_EMAIL}
+                      </a>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
