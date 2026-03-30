@@ -4,6 +4,56 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Link2, UsersRound, LayoutDashboard, ShieldCheck, Instagram, Mic } from 'lucide-react';
 
+const CAMPAIGN_WEEK_EVENTS: {
+  day: string;
+  date: string;
+  time: string;
+  description: string;
+  rsvpHref: string;
+  imageSrc: string;
+}[] = [
+  {
+    day: 'Monday',
+    date: 'March 30',
+    time: '10am-1pm',
+    description: 'Stop by a listening session and share about what you want!',
+    rsvpHref: '#rsvp-mon',
+    imageSrc: 'https://i.imgur.com/HCj0tS3.jpeg',
+  },
+  {
+    day: 'Tuesday',
+    date: 'March 31',
+    time: '4-5pm',
+    description: 'Join us for a curated tour of a "Hidden Place" at Babson!',
+    rsvpHref: 'https://luma.com/g974ye0g',
+    imageSrc: 'https://i.imgur.com/Lui7k8F.jpeg',
+  },
+  {
+    day: 'Wednesday',
+    date: 'April 1',
+    time: '4-6pm',
+    description: 'Learn about our Build Babson Better platform over drinks & food!',
+    rsvpHref: 'https://luma.com/3azm7dqc',
+    imageSrc: 'https://i.imgur.com/CVY1odr.jpeg',
+  },
+  {
+    day: 'Thursday',
+    date: 'April 2',
+    time: '4-6pm',
+    description: "Come check out student ventures and stop by my startup's booth!",
+    rsvpHref: 'https://cvent.me/W3XG4k',
+    imageSrc: 'https://i.imgur.com/7Eu1th5.jpeg',
+  },
+  {
+    day: 'Friday',
+    date: 'April 3',
+    time: '6-9pm',
+    description: 'Come over for a Build Babson Better BBQ after the Holi festivities.',
+    rsvpHref: 'https://luma.com/x28qsi1g',
+    imageSrc: 'https://i.imgur.com/mpujAan.jpeg',
+  },
+];
+
 const features: {
   icon: typeof Link2;
   color: string;
@@ -15,24 +65,21 @@ const features: {
     icon: Link2,
     color: 'bg-amber-50 text-amber-500',
     kicker: '01 · Connect the Dots',
-    title: 'Career access that fits how you work',
+    title: 'Career access that fits your profile',
     bullets: [
-      'Sector-specific alumni intros and startup-oriented programming, not another generic panel',
-      'Babson Bridge alumni speaker series (entrepreneurship-first, intros built in)',
-      'Shared Alumni Warm-Intro Directory: searchable by industry, open to all grad students',
-      'GSC International Student Networking Track for students building networks from scratch',
       'Work with GradCCD to shift generic career events toward warm-intro, industry-specific sessions',
+      'Host Babson Bridge alumni speaker series with various clubs that are job and career focused',
+      'GSC International Student Networking Track for students building networks from scratch',
     ],
   },
   {
     icon: UsersRound,
     color: 'bg-emerald-50 text-emerald-600',
     kicker: '02 · One GSC',
-    title: 'No silos: communicate, connect, include',
+    title: 'No silos and one connected student body',
     bullets: [
-      'One cross-program social per semester (BBQ model, already proven)',
+      'Host regular cross-program socials and mixers (e.g. Biweekly Rogers Pub Mixers, GSC BBQs, etc.)',
       'GSC Open Hours: any student, any program, no appointment',
-      'Communication Charter: advance notice on events, dietary accommodations proactively included',
       'Consistent WhatsApp + email channels so no one misses what matters',
     ],
   },
@@ -40,13 +87,10 @@ const features: {
     icon: LayoutDashboard,
     color: 'bg-violet-50 text-violet-600',
     kicker: '03 · Build Babson Better',
-    title: 'Student Voice Dashboard: accountability, not silence',
+    title: 'A Student Voice Dashboard that tracks your feedback',
     bullets: [
-      'Close the gap between what Babson promises and what you experience. This feed carries that same energy',
-      'Launch a live Student Voice Dashboard: class-rep issues logged with owner + resolution status',
-      '48-hour advance-notice standard for Canvas pre-work, pushed through GSC channels',
-      'Monthly Venture Meetups: informal pitch nights, GSC-backed, open to all programs',
-      'Advocate for a GSC-backed student venture seed fund',
+      'Close the gap between what Babson promises and what you experience',
+      'Submit your ideas and feedback and upvote what you want to see',
     ],
   },
 ];
@@ -68,10 +112,7 @@ export default function HomePage() {
                 <path d="M9 5C9.8 5.5 10.3 6.3 10.3 7.2C10.3 8.1 9.8 8.9 9 9.4" stroke="white" strokeWidth="1.3" strokeLinecap="round"/>
               </svg>
             </div>
-            <div className="flex flex-col">
-              <span className="text-[15px] font-bold tracking-tight text-emerald-800 leading-tight">Build Babson Better</span>
-              <span className="text-[11px] font-medium text-gray-500 tracking-tight">Babson Voice · grad student ideas</span>
-            </div>
+            <span className="text-[15px] font-bold tracking-tight text-emerald-800 leading-tight">Build Babson Better</span>
           </div>
         </header>
 
@@ -107,10 +148,61 @@ export default function HomePage() {
               />
             </div>
             <p className="mt-5 text-gray-500 text-[15px] leading-relaxed md:text-lg md:max-w-xl md:mx-auto">
-              We&apos;re at Babson for a short time. One moment to make this year count. Every program connected, every student seen, feedback that turns into action. Pitch ideas anonymously, vote, and volunteer here; it&apos;s the same energy as the{' '}
-              <span className="text-gray-700 font-medium">GSC Student Voice Dashboard</span> Ryan&apos;s committed to launching Day 1.
+              We&apos;re at Babson for a short time. One moment to make this year count. Let&apos;s Build a Better Babson together that we can be proud of looking back at our time here.
             </p>
-            <div className="mt-4 flex flex-col gap-2 text-[13px] text-gray-500 md:items-center md:max-w-lg md:mx-auto">
+            <h2 className="text-[#0f1f1a] text-[22px] font-bold tracking-tight md:text-2xl text-center mt-5 md:max-w-xl md:mx-auto">
+              Join my upcoming events to learn more!
+            </h2>
+          </div>
+
+          {/* Campaign week calendar */}
+          <section
+            className="w-full max-w-6xl mt-6 md:mt-8 md:mx-auto"
+            aria-label="Campaign week events, March 30 to April 3"
+          >
+            <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-2">
+              {CAMPAIGN_WEEK_EVENTS.map((ev) => (
+                <article
+                  key={ev.day}
+                  className="flex flex-col overflow-hidden rounded-lg border border-gray-200/80 bg-[#fafafa] shadow-sm text-center"
+                >
+                  <header className="bg-emerald-800 text-white px-3 py-3">
+                    <p className="text-[15px] font-bold leading-tight">{ev.day}</p>
+                    <p className="text-[13px] font-semibold text-white/95 mt-0.5">{ev.date}</p>
+                  </header>
+                  <div className="relative aspect-[4/3] w-full bg-gray-100">
+                    <Image
+                      src={ev.imageSrc}
+                      alt={`${ev.day} campaign event`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 520px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                    />
+                  </div>
+                  <p className="text-[13px] font-bold text-gray-900 px-2 pt-3 pb-1">{ev.time}</p>
+                  <p className="text-[12px] leading-snug text-gray-700 px-3 pb-3 flex-1">{ev.description}</p>
+                  <div className="mt-auto border-t border-gray-200 bg-white py-2.5 px-2">
+                    {ev.day === 'Monday' ? (
+                      <span className="text-[13px] font-semibold text-emerald-800">In Olin Lobby</span>
+                    ) : (
+                      <a
+                        href={ev.rsvpHref}
+                        className="text-[13px] font-semibold text-emerald-700 hover:text-emerald-800 underline underline-offset-2"
+                        {...(ev.rsvpHref.startsWith('http')
+                          ? { target: '_blank', rel: 'noopener noreferrer' }
+                          : {})}
+                      >
+                        RSVP
+                      </a>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <div className="md:text-center md:max-w-2xl md:mx-auto w-full mt-4">
+            <div className="flex flex-col gap-2 text-[13px] text-gray-500 md:items-center md:max-w-lg md:mx-auto">
               <p className="flex flex-wrap items-center gap-x-2 gap-y-1 md:justify-center">
                 <span className="inline-flex items-center gap-1 text-gray-700 font-medium">
                   <Mic className="h-3.5 w-3.5 text-emerald-600 shrink-0" aria-hidden />
@@ -119,21 +211,17 @@ export default function HomePage() {
               </p>
               <p>
                 Voting <span className="text-gray-700 font-medium">Mon Apr 6 to Wed Apr 8</span>
-                <span className="text-gray-400"> · </span>
-                No campaigning Sun Apr 5
               </p>
-              <p>
+              <p className="text-[13px] md:text-[14px]">
                 <a
                   href="https://instagram.com/buildbabsonbetter"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-emerald-700 font-medium hover:text-emerald-800 underline underline-offset-2"
+                  className="inline-flex items-center gap-2 text-emerald-700 font-semibold hover:text-emerald-800 underline underline-offset-2"
                 >
-                  <Instagram className="h-3.5 w-3.5" aria-hidden />
+                  <Instagram className="h-4 w-4 shrink-0" aria-hidden />
                   @buildbabsonbetter
                 </a>
-                <span className="text-gray-400"> · </span>
-                Campaign week Mar 30 to Apr 3 · RSVP &amp; stops via posts
               </p>
             </div>
           </div>

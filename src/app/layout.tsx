@@ -11,23 +11,23 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Babson Voice — Your Ideas, Your Campus',
+  title: 'Build Babson Better',
   description: 'An anonymous platform for Babson students to share ideas, vote on campus improvements, and volunteer to make them happen.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://babson-voice.vercel.app'),
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Babson Voice',
+    title: 'Build Babson Better',
   },
   openGraph: {
-    title: 'Babson Voice — Your Ideas, Your Campus',
+    title: 'Build Babson Better',
     description: 'An anonymous platform for Babson students to share ideas, vote on campus improvements, and volunteer to make them happen.',
     type: 'website',
   },
   twitter: {
     card: 'summary',
-    title: 'Babson Voice — Your Ideas, Your Campus',
+    title: 'Build Babson Better',
     description: 'An anonymous platform for Babson students to share ideas, vote on campus improvements, and volunteer to make them happen.',
   },
 };

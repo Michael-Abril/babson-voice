@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Babson Voice',
-    short_name: 'Babson Voice',
+    name: 'Build Babson Better',
+    short_name: 'Build Babson Better',
     description: 'Anonymous campus feedback for Babson College students.',
     start_url: '/dashboard/',
     scope: '/',
