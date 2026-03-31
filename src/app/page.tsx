@@ -17,6 +17,8 @@ import {
 
 const HOLI_ENGAGE_URL = 'https://engage.babson.edu/web/rsvp_boot?id=376170';
 
+const DEBATE_RSVP_URL = 'https://cglink.me/22L/r376207';
+
 const BBQ_HELP_FORM_URL = 'https://forms.office.com/r/JseTq2Q7Bp';
 
 const CONNECT_THE_DOTS_IMAGE_SRC = 'https://i.imgur.com/YliOPwp.jpeg';
@@ -278,6 +280,15 @@ export default function HomePage() {
                     <Mic className="h-3.5 w-3.5 text-red-600 shrink-0" aria-hidden />
                     <span className="font-medium leading-snug text-center">
                       Debate Thu Apr 2 · 12-1pm · Winn Auditorium
+                      {' · '}
+                      <a
+                        href={DEBATE_RSVP_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-red-800 underline underline-offset-2 hover:text-red-900"
+                      >
+                        RSVP
+                      </a>
                     </span>
                   </p>
                   <p className="text-center">
