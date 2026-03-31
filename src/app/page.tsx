@@ -323,7 +323,7 @@ export default function HomePage() {
                 role="note"
               >
                 <p className="text-[12px] font-bold uppercase tracking-wide text-emerald-800 mb-2">
-                  Follow us on Instagram
+                  Follow me on Instagram
                 </p>
                 <a
                   href="https://instagram.com/buildbabsonbetter"
