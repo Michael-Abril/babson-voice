@@ -19,6 +19,10 @@ const HOLI_ENGAGE_URL = 'https://engage.babson.edu/web/rsvp_boot?id=376170';
 
 const BBQ_HELP_FORM_URL = 'https://forms.office.com/r/JseTq2Q7Bp';
 
+const CONNECT_THE_DOTS_IMAGE_SRC = 'https://i.imgur.com/YliOPwp.jpeg';
+const ONE_GSC_IMAGE_SRC = 'https://i.imgur.com/da14xjC.jpeg';
+const BUILD_BABSON_BETTER_IMAGE_SRC = 'https://i.imgur.com/vKFuTRA.jpeg';
+
 const engageLinkClass =
   'text-emerald-700 underline underline-offset-2 font-medium hover:text-emerald-800 break-words';
 
@@ -393,6 +397,39 @@ export default function HomePage() {
                       <p className="text-[#1a1c1c] text-[14px] font-semibold leading-tight mb-2 text-center">
                         {f.title}
                       </p>
+                      {f.kicker === '01 · Connect the Dots' && (
+                        <div className="relative mt-1 mb-3 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
+                          <Image
+                            src={CONNECT_THE_DOTS_IMAGE_SRC}
+                            alt="Connect the Dots — career access at Babson"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 280px"
+                          />
+                        </div>
+                      )}
+                      {f.kicker === '02 · One GSC' && (
+                        <div className="relative mt-1 mb-3 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
+                          <Image
+                            src={ONE_GSC_IMAGE_SRC}
+                            alt="One GSC — connected Babson student community"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 280px"
+                          />
+                        </div>
+                      )}
+                      {f.kicker === '03 · Build Babson Better' && (
+                        <div className="relative mt-1 mb-3 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
+                          <Image
+                            src={BUILD_BABSON_BETTER_IMAGE_SRC}
+                            alt="Build Babson Better — Student Voice Dashboard"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 280px"
+                          />
+                        </div>
+                      )}
                       <ul className="text-gray-500 text-[13px] leading-snug space-y-1.5 list-disc pl-4 marker:text-emerald-600 text-left">
                         {f.bullets.map((line, i) => (
                           <li key={typeof line === 'string' ? line : `${f.kicker}-${i}`} className="pl-0.5">
@@ -448,7 +485,6 @@ export default function HomePage() {
             >
               Add Idea to Student Voice Dashboard <ArrowRight className="h-4 w-4 shrink-0" />
             </Link>
-            <p className="text-xs text-gray-400 mono-text">@babson.edu · no password · posts stay anonymous</p>
           </div>
 
           <blockquote className="mt-12 md:mt-16 w-full max-w-2xl mx-auto rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50/90 to-white px-6 py-7 md:px-10 md:py-8 shadow-sm ring-1 ring-emerald-900/5">
@@ -466,7 +502,6 @@ export default function HomePage() {
           >
             Add Idea to Student Voice Dashboard <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
           </Link>
-          <p className="text-center text-xs text-gray-400 mono-text mt-2">@babson.edu · no password · posts stay anonymous</p>
         </div>
       </div>
     </div>
