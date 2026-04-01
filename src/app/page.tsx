@@ -100,8 +100,9 @@ const features: {
     icon: UsersRound,
     color: 'bg-emerald-50 text-emerald-600',
     kicker: '02 · One GSC',
-    title: 'No silos and one connected student body',
+    title: 'No silos and one connected student body across every program',
     bullets: [
+      'One GSC for all graduate students: 1Y, Part-Time, and 2Y MBAs; Blended Learning & Miami MBAs; MSEL; MSBA; and MSF.',
       'Host regular cross-program socials and mixers (e.g. Biweekly Rogers Pub Mixers, GSC BBQs, etc.)',
       (
         <>
@@ -194,10 +195,10 @@ export default function HomePage() {
               />
             </div>
             <p className="mt-5 text-gray-500 text-[15px] leading-relaxed md:text-lg md:max-w-xl md:mx-auto">
-              We&apos;re at Babson for a short time. One moment to make this year count. Let&apos;s{' '}
+              We&apos;re at Babson for a short time—whether you&apos;re full-time, part-time, blended, or in a specialized master&apos;s. Let&apos;s make our time here count and{' '}
               <span className="font-bold text-emerald-600">Build a Better Babson</span>
               {' '}
-              together that we can be proud of looking back at our time here come Commencement 🎉
+              together—something we can be proud of looking back on at Commencement and beyond 🎉
             </p>
             <h2 className="text-[#0f1f1a] text-[22px] font-bold tracking-tight md:text-2xl text-center mt-5 md:max-w-xl md:mx-auto">
               Join my upcoming events to learn more!
