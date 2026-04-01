@@ -29,14 +29,18 @@ const engageLinkClass =
   'text-emerald-700 underline underline-offset-2 font-medium hover:text-emerald-800 break-words';
 
 const CAMPAIGN_WEEK_EVENTS: {
+  id: string;
   day: string;
   date: string;
   time: string;
   description: string;
   rsvpHref: string;
   imageSrc: string;
+  /** Shown under RSVP when set (e.g. room) */
+  footerNote?: string;
 }[] = [
   {
+    id: 'mon-listening',
     day: 'Monday',
     date: 'March 30',
     time: '10am-1pm',
@@ -45,6 +49,7 @@ const CAMPAIGN_WEEK_EVENTS: {
     imageSrc: 'https://i.imgur.com/HCj0tS3.jpeg',
   },
   {
+    id: 'tue-hidden-place',
     day: 'Tuesday',
     date: 'March 31',
     time: '4-5pm',
@@ -53,6 +58,7 @@ const CAMPAIGN_WEEK_EVENTS: {
     imageSrc: 'https://i.imgur.com/Lui7k8F.jpeg',
   },
   {
+    id: 'wed-bbb-drinks',
     day: 'Wednesday',
     date: 'April 1',
     time: '4:30pm-6pm',
@@ -61,6 +67,18 @@ const CAMPAIGN_WEEK_EVENTS: {
     imageSrc: 'https://i.imgur.com/CVY1odr.jpeg',
   },
   {
+    id: 'thu-gsc-debate',
+    day: 'Thursday',
+    date: 'April 2',
+    time: '12-1pm',
+    description:
+      "GSC Presidential Debate by Graduate Student Council—hear candidates' platforms, ask questions, and vote informed. Food provided.",
+    rsvpHref: DEBATE_RSVP_URL,
+    imageSrc: 'https://i.imgur.com/uqXWZ4w.jpeg',
+    footerNote: 'Winn Auditorium',
+  },
+  {
+    id: 'thu-ventures',
     day: 'Thursday',
     date: 'April 2',
     time: '4-6pm',
@@ -69,6 +87,7 @@ const CAMPAIGN_WEEK_EVENTS: {
     imageSrc: 'https://i.imgur.com/7Eu1th5.jpeg',
   },
   {
+    id: 'fri-potluck',
     day: 'Friday',
     date: 'April 3',
     time: '6-9pm',
@@ -208,12 +227,12 @@ export default function HomePage() {
           {/* Campaign week calendar */}
           <section
             className="w-full max-w-6xl mt-6 md:mt-8 md:mx-auto"
-            aria-label="Campaign week events, March 30 to April 3"
+            aria-label="Campaign week events, March 30 through April 3, including GSC Presidential Debate"
           >
-            <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-2">
+            <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-2">
               {CAMPAIGN_WEEK_EVENTS.map((ev) => (
                 <article
-                  key={ev.day}
+                  key={ev.id}
                   className="flex flex-col overflow-hidden rounded-lg border border-gray-200/80 bg-[#fafafa] shadow-sm text-center"
                 >
                   <header className="bg-emerald-800 text-white px-3 py-3">
@@ -223,10 +242,10 @@ export default function HomePage() {
                   <div className="relative aspect-[4/3] w-full bg-gray-100">
                     <Image
                       src={ev.imageSrc}
-                      alt={`${ev.day} campaign event`}
+                      alt={`${ev.day} ${ev.date}: campaign event`}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 520px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                      sizes="(max-width: 520px) 100vw, (max-width: 1280px) 33vw, 16vw"
                     />
                   </div>
                   <p className="text-[13px] font-bold text-gray-900 px-2 pt-3 pb-1">{ev.time}</p>
@@ -247,6 +266,9 @@ export default function HomePage() {
                         >
                           RSVP
                         </a>
+                        {ev.footerNote && (
+                          <span className="text-[12px] font-medium text-gray-600 leading-snug">{ev.footerNote}</span>
+                        )}
 
                         {ev.day === 'Friday' && (
                           <a
