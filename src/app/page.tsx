@@ -2,9 +2,10 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import {
   ArrowRight,
+  Check,
   Link2,
   UsersRound,
   LayoutDashboard,
@@ -15,11 +16,9 @@ import {
   Mail,
 } from 'lucide-react';
 
-const HOLI_ENGAGE_URL = 'https://engage.babson.edu/web/rsvp_boot?id=376170';
+const HOLI_ENGAGE_URL = 'https://engage.babson.edu/rsvp?id=376170';
 
 const DEBATE_RSVP_URL = 'https://cglink.me/22L/r376207';
-
-const BBQ_HELP_FORM_URL = 'https://forms.office.com/r/JseTq2Q7Bp';
 
 const CONNECT_THE_DOTS_IMAGE_SRC = 'https://i.imgur.com/YliOPwp.jpeg';
 const ONE_GSC_IMAGE_SRC = 'https://i.imgur.com/da14xjC.jpeg';
@@ -28,11 +27,17 @@ const BUILD_BABSON_BETTER_IMAGE_SRC = 'https://i.imgur.com/vKFuTRA.jpeg';
 const engageLinkClass =
   'text-emerald-700 underline underline-offset-2 font-medium hover:text-emerald-800 break-words';
 
+/**
+ * Event end instant on the Babson calendar (US Eastern). Used so "passed" reflects real end time
+ * in absolute terms; comparison uses the viewer's local clock (Date) against that instant.
+ */
 const CAMPAIGN_WEEK_EVENTS: {
   id: string;
   day: string;
   date: string;
   time: string;
+  /** ISO 8601 end time (America/New_York, EDT in late March–April 2026) */
+  eventEndAt: string;
   description: string;
   rsvpHref: string;
   imageSrc: string;
@@ -44,6 +49,7 @@ const CAMPAIGN_WEEK_EVENTS: {
     day: 'Monday',
     date: 'March 30',
     time: '10am-1pm',
+    eventEndAt: '2026-03-30T13:00:00-04:00',
     description: 'Stop by a listening session and share about what you want!',
     rsvpHref: '#rsvp-mon',
     imageSrc: 'https://i.imgur.com/HCj0tS3.jpeg',
@@ -53,6 +59,7 @@ const CAMPAIGN_WEEK_EVENTS: {
     day: 'Tuesday',
     date: 'March 31',
     time: '4-5pm',
+    eventEndAt: '2026-03-31T17:00:00-04:00',
     description: 'Join us for a curated tour of a "Hidden Place" at Babson!',
     rsvpHref: 'https://luma.com/g974ye0g',
     imageSrc: 'https://i.imgur.com/Lui7k8F.jpeg',
@@ -62,6 +69,7 @@ const CAMPAIGN_WEEK_EVENTS: {
     day: 'Wednesday',
     date: 'April 1',
     time: '4:30pm-6pm',
+    eventEndAt: '2026-04-01T18:00:00-04:00',
     description: 'Learn about our Build Babson Better platform over drinks & food!',
     rsvpHref: 'https://luma.com/3azm7dqc',
     imageSrc: 'https://i.imgur.com/CVY1odr.jpeg',
@@ -71,6 +79,7 @@ const CAMPAIGN_WEEK_EVENTS: {
     day: 'Thursday',
     date: 'April 2',
     time: '12-1pm',
+    eventEndAt: '2026-04-02T13:00:00-04:00',
     description:
       "GSC Presidential Debate by Graduate Student Council—hear candidates' platforms, ask questions, and vote informed. Food provided.",
     rsvpHref: DEBATE_RSVP_URL,
@@ -82,20 +91,39 @@ const CAMPAIGN_WEEK_EVENTS: {
     day: 'Thursday',
     date: 'April 2',
     time: '4-6pm',
+    eventEndAt: '2026-04-02T18:00:00-04:00',
     description: "Come check out student ventures and stop by my startup's booth!",
     rsvpHref: 'https://cvent.me/W3XG4k',
     imageSrc: 'https://i.imgur.com/7Eu1th5.jpeg',
   },
   {
+    id: 'fri-holi',
+    day: 'Friday',
+    date: 'April 3',
+    time: '11am-3pm',
+    eventEndAt: '2026-04-03T15:00:00-04:00',
+    description:
+      'Holi with Babson India Graduate Club—11am–1pm drinks & appetizers at Roger’s Pub; 1pm–3pm colors, lunch & music at the Forest Basketball Court. Whites encouraged; bring ID for drinks. Rinse off at the venue before entering buildings. Flash sale $15.50 · regular $19.90 on Engage.',
+    rsvpHref: HOLI_ENGAGE_URL,
+    imageSrc: 'https://i.imgur.com/QdId0Mk.jpeg',
+    footerNote: 'Roger’s Pub · Forest Basketball Court',
+  },
+  {
     id: 'fri-potluck',
     day: 'Friday',
     date: 'April 3',
-    time: '6-9pm',
-    description: 'Join us for a Build Babson Better Potluck!',
+    time: '4:30pm-8pm',
+    eventEndAt: '2026-04-03T20:00:00-04:00',
+    description: 'Build Babson Better Potluck—bring a dish or yourself!',
     rsvpHref: 'https://luma.com/x28qsi1g',
     imageSrc: 'https://i.imgur.com/mpujAan.jpeg',
+    footerNote: 'Weissman Foundry Social Kitchen',
   },
 ];
+
+function isCampaignEventPast(eventEndAt: string, now: Date): boolean {
+  return now.getTime() > new Date(eventEndAt).getTime();
+}
 
 const features: {
   icon: typeof Link2;
@@ -161,6 +189,11 @@ export default function HomePage() {
   const [gscCalendarOpen, setGscCalendarOpen] = useState(false);
   const [contactEmailOpen, setContactEmailOpen] = useState(false);
   const [dashboardDemoOpen, setDashboardDemoOpen] = useState(false);
+  /** Past styling uses the client clock; keep false until mount so SSR and first paint match (no hydration flash). */
+  const [eventScheduleHydrated, setEventScheduleHydrated] = useState(false);
+  useEffect(() => {
+    setEventScheduleHydrated(true);
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -227,65 +260,103 @@ export default function HomePage() {
           {/* Campaign week calendar */}
           <section
             className="w-full max-w-6xl mt-6 md:mt-8 md:mx-auto"
-            aria-label="Campaign week events, March 30 through April 3, including GSC Presidential Debate"
+            aria-label="Campaign week events, March 30 through April 3, including GSC Presidential Debate, Holi, and potluck"
           >
-            <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-2">
-              {CAMPAIGN_WEEK_EVENTS.map((ev) => (
-                <article
-                  key={ev.id}
-                  className="flex flex-col overflow-hidden rounded-lg border border-gray-200/80 bg-[#fafafa] shadow-sm text-center"
-                >
-                  <header className="bg-emerald-800 text-white px-3 py-3">
-                    <p className="text-[15px] font-bold leading-tight">{ev.day}</p>
-                    <p className="text-[13px] font-semibold text-white/95 mt-0.5">{ev.date}</p>
-                  </header>
-                  <div className="relative aspect-[4/3] w-full bg-gray-100">
-                    <Image
-                      src={ev.imageSrc}
-                      alt={`${ev.day} ${ev.date}: campaign event`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 520px) 100vw, (max-width: 1280px) 33vw, 16vw"
-                    />
-                  </div>
-                  <p className="text-[13px] font-bold text-gray-900 px-2 pt-3 pb-1">{ev.time}</p>
-                  <p className="text-[12px] leading-snug text-gray-700 px-3 pb-3 flex-1">
-                    {ev.description}
-                  </p>
-                  <div className="mt-auto border-t border-gray-200 bg-white py-2.5 px-2">
-                    {ev.day === 'Monday' ? (
-                      <span className="text-[13px] font-semibold text-emerald-800">In Olin Lobby</span>
-                    ) : (
-                      <div className="flex flex-col gap-2">
-                        <a
-                          href={ev.rsvpHref}
-                          className="text-[13px] font-semibold text-emerald-700 hover:text-emerald-800 underline underline-offset-2"
-                          {...(ev.rsvpHref.startsWith('http')
-                            ? { target: '_blank', rel: 'noopener noreferrer' }
-                            : {})}
+            <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-3 md:gap-2">
+              {CAMPAIGN_WEEK_EVENTS.map((ev) => {
+                const isPast =
+                  eventScheduleHydrated && isCampaignEventPast(ev.eventEndAt, new Date());
+                return (
+                  <article
+                    key={ev.id}
+                    aria-label={
+                      isPast
+                        ? `${ev.day} ${ev.date}, past campaign event`
+                        : `${ev.day} ${ev.date}, campaign event`
+                    }
+                    className={`flex flex-col overflow-hidden rounded-lg border text-center shadow-sm transition-[background-color,border-color] duration-300 ${
+                      isPast ? 'border-gray-300 bg-gray-100' : 'border-gray-200/80 bg-[#fafafa]'
+                    }`}
+                  >
+                    <header
+                      className={`px-3 py-3 text-white ${isPast ? 'bg-gray-500' : 'bg-emerald-800'}`}
+                    >
+                      <p className="text-[15px] font-bold leading-tight">{ev.day}</p>
+                      <p className="text-[13px] font-semibold text-white/95 mt-0.5">{ev.date}</p>
+                    </header>
+                    <div
+                      className={`relative aspect-[4/3] w-full bg-gray-100 ${isPast ? 'opacity-95' : ''}`}
+                    >
+                      <Image
+                        src={ev.imageSrc}
+                        alt={`${ev.day} ${ev.date}: campaign event`}
+                        fill
+                        className={`object-cover ${isPast ? 'grayscale-[0.35]' : ''}`}
+                        sizes="(max-width: 520px) 100vw, (max-width: 1280px) 33vw, 16vw"
+                      />
+                      {isPast && (
+                        <div
+                          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25"
+                          aria-hidden
                         >
-                          RSVP
-                        </a>
-                        {ev.footerNote && (
-                          <span className="text-[12px] font-medium text-gray-600 leading-snug">{ev.footerNote}</span>
-                        )}
-
-                        {ev.day === 'Friday' && (
+                          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg ring-4 ring-white/90">
+                            <Check
+                              className="h-8 w-8"
+                              strokeWidth={3}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <p
+                      className={`text-[13px] font-bold px-2 pt-3 pb-1 ${isPast ? 'text-gray-600' : 'text-gray-900'}`}
+                    >
+                      {ev.time}
+                    </p>
+                    <p
+                      className={`text-[12px] leading-snug px-3 pb-3 flex-1 ${isPast ? 'text-gray-500' : 'text-gray-700'}`}
+                    >
+                      {ev.description}
+                    </p>
+                    <div
+                      className={`mt-auto border-t py-2.5 px-2 ${isPast ? 'border-gray-300 bg-gray-50/90' : 'border-gray-200 bg-white'}`}
+                    >
+                      {ev.day === 'Monday' ? (
+                        <span
+                          className={`text-[13px] font-semibold ${isPast ? 'text-gray-600' : 'text-emerald-800'}`}
+                        >
+                          In Olin Lobby
+                        </span>
+                      ) : (
+                        <div className="flex flex-col gap-2">
                           <a
-                            href={BBQ_HELP_FORM_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-[12.5px] font-semibold text-emerald-800 shadow-sm hover:bg-emerald-100 hover:border-emerald-300 transition-colors"
+                            href={ev.rsvpHref}
+                            className={`text-[13px] font-semibold underline underline-offset-2 ${
+                              isPast
+                                ? 'text-emerald-800/90 hover:text-emerald-900'
+                                : 'text-emerald-700 hover:text-emerald-800'
+                            }`}
+                            {...(ev.rsvpHref.startsWith('http')
+                              ? { target: '_blank', rel: 'noopener noreferrer' }
+                              : {})}
                           >
-                            <UsersRound className="h-4 w-4 shrink-0" aria-hidden />
-                            Help host / sponsor / organize
+                            RSVP
                           </a>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </article>
-              ))}
+                          {ev.footerNote && (
+                            <span
+                              className={`text-[12px] font-medium leading-snug ${isPast ? 'text-gray-500' : 'text-gray-600'}`}
+                            >
+                              {ev.footerNote}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </section>
 
