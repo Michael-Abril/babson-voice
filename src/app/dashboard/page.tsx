@@ -137,9 +137,11 @@ export default function FeedPage() {
 
   const userVotesMap = useMemo(() => {
     const map: Record<string, UserVote> = {};
-    for (const v of allVotes) { map[v.ideaId] = v; }
+    for (const v of allVotes) {
+      if (v.voterId === userId) map[v.ideaId] = v;
+    }
     return map;
-  }, [allVotes]);
+  }, [allVotes, userId]);
 
   const filtered = useMemo(() => {
     let items = categoryFilter === 'all' ? allIdeas : allIdeas.filter((i) => i.category === categoryFilter);
@@ -165,11 +167,12 @@ export default function FeedPage() {
     setVoteError('');
     try {
       const existing = userVotesMap[ideaId];
+
       if (existing && existing.voteType === type) {
-        // Same direction tapped again → remove vote (toggle off)
+        // Fizz-style: clicking same direction toggles OFF (removes vote)
         await removeVote(userId, ideaId);
       } else {
-        // New direction or switching direction → delete old + insert new (server-side)
+        // Switching direction OR new vote - castVote handles both
         await castVote(userId, ideaId, type);
       }
       await recalculateIdeaVotes(ideaId);
