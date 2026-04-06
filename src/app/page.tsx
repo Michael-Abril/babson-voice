@@ -97,18 +97,6 @@ const CAMPAIGN_WEEK_EVENTS: {
     imageSrc: 'https://i.imgur.com/7Eu1th5.jpeg',
   },
   {
-    id: 'fri-holi',
-    day: 'Friday',
-    date: 'April 3',
-    time: '11am-3pm',
-    eventEndAt: '2026-04-03T15:00:00-04:00',
-    description:
-      'Holi with Babson India Graduate Club—11am–1pm drinks & appetizers at Roger’s Pub; 1pm–3pm colors, lunch & music at the Forest Basketball Court. Whites encouraged; bring ID for drinks. Rinse off at the venue before entering buildings. Flash sale $15.50 · regular $19.90 on Engage.',
-    rsvpHref: HOLI_ENGAGE_URL,
-    imageSrc: 'https://i.imgur.com/QdId0Mk.jpeg',
-    footerNote: 'Roger’s Pub · Forest Basketball Court',
-  },
-  {
     id: 'fri-potluck',
     day: 'Friday',
     date: 'April 3',
@@ -260,9 +248,9 @@ export default function HomePage() {
           {/* Campaign week calendar */}
           <section
             className="w-full max-w-6xl mt-6 md:mt-8 md:mx-auto"
-            aria-label="Campaign week events, March 30 through April 3, including GSC Presidential Debate, Holi, and potluck"
+            aria-label="Campaign week events, March 30 through April 3, including GSC Presidential Debate and potluck"
           >
-            <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-3 md:gap-2">
+            <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-2">
               {CAMPAIGN_WEEK_EVENTS.map((ev) => {
                 const isPast =
                   eventScheduleHydrated && isCampaignEventPast(ev.eventEndAt, new Date());
