@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useEffect, useState, type ReactNode } from 'react';
 import {
   ArrowRight,
@@ -15,6 +14,13 @@ import {
   ChevronDown,
   Mail,
 } from 'lucide-react';
+
+const ADMINISTRATION_START = '2026-09-01T00:00:00-04:00';
+// Placeholder — update when GSC confirms Fall 2026 official kickoff
+const OFFICIAL_HANDOVER_DATE = 'Mid-May 2026';
+const STUDENT_VOICE_DASHBOARD_URL = 'https://buildbabsonbetter.com/dashboard';
+// Update with real route
+const ELECTION_RESULT_DATE = 'April 10, 2026';
 
 const HOLI_ENGAGE_URL = 'https://engage.babson.edu/rsvp?id=376170';
 
@@ -163,6 +169,132 @@ const features: {
   },
 ];
 
+const transitionPillars: {
+  icon: typeof Link2;
+  color: string;
+  kicker: string;
+  title: string;
+  bullets: (string | ReactNode)[];
+}[] = [
+  {
+    icon: Link2,
+    color: 'bg-amber-50 text-amber-500',
+    kicker: '01 · Connect the Dots',
+    title: 'We connect career access to your profile',
+    bullets: [
+      'We\'re working with GradCCD to shift generic career events toward warm-intro, industry-specific sessions',
+      'We\'re hosting Babson Bridge alumni speaker series with various clubs that are job and career focused',
+      'We\'re running a GSC International Student Networking Track for students building networks from scratch',
+    ],
+  },
+  {
+    icon: UsersRound,
+    color: 'bg-emerald-50 text-emerald-600',
+    kicker: '02 · One GSC',
+    title: 'We\'re one connected student body across every program',
+    bullets: [
+      'We\'re one GSC for all graduate students: 1Y, Part-Time, and 2Y MBAs; Blended Learning & Miami MBAs; MSEL; MSBA; and MSF.',
+      'We\'re hosting regular cross-program socials and mixers (e.g. Biweekly Rogers Pub Mixers, GSC BBQs, etc.)',
+      (
+        <>
+          Cross-Cultural Events Calendar: we surface cultural events across Babson—like our annual{' '}
+          <a href={HOLI_ENGAGE_URL} target="_blank" rel="noopener noreferrer" className={engageLinkClass}>
+            Holi Celebration
+          </a>
+        </>
+      ),
+      'We\'re keeping WhatsApp and email channels consistent so no one misses what matters',
+    ],
+  },
+  {
+    icon: LayoutDashboard,
+    color: 'bg-violet-50 text-violet-600',
+    kicker: '03 · Build Babson Better',
+    title: 'We\'re building a Student Voice Dashboard that tracks your feedback',
+    bullets: [
+      'You can submit ideas and feedback anonymously and upvote what you want to see',
+      'We\'re making it easy to pledge volunteer support and see momentum on initiatives',
+      'We\'re closing the gap between what Babson promises and what you experience',
+    ],
+  },
+];
+
+const TRANSITION_TEAM: {
+  role: string;
+  name: string;
+  quote: string;
+  photoSrc?: string;
+  pending?: boolean;
+}[] = [
+  {
+    role: 'President',
+    name: "Ryan Lee, MBA '27",
+    quote: 'Here to build what we talked about — together.',
+    photoSrc: 'https://i.imgur.com/wUwSq8F.png',
+  },
+  {
+    role: 'Chief of Staff',
+    name: 'Delzaan Sutaria',
+    quote: 'Structure, clarity, and follow-through — turning student voice into outcomes.',
+    photoSrc: 'https://i.imgur.com/xsiB4cz.png',
+  },
+  {
+    role: 'Chief of Academic Affairs',
+    name: 'Jake Rossetto',
+    quote: 'Making sure your electives actually align with your goals.',
+    photoSrc: 'https://i.imgur.com/IFNwl3C.png',
+  },
+  {
+    role: 'Chief of Graduate Student Life',
+    name: "Rahul Luthra, MBA '27",
+    quote: 'Founder of Beers & Banter. Building the moments you\'ll remember.',
+    photoSrc: 'https://i.imgur.com/JhLnw02.png',
+  },
+  {
+    role: 'Co-VP of Events',
+    name: 'Alia Nizam',
+    quote: 'From class bonding to city adventures — making GSC events actually fun.',
+    photoSrc: 'https://i.imgur.com/cVPB1Cw.png',
+  },
+  {
+    role: 'VP of CCD Relations',
+    name: "Daniel Sousa Queiroz, MBA '27",
+    quote: 'Expanding recruiter reach and making career access real for every program.',
+    photoSrc: 'https://i.imgur.com/nVTEUPN.png',
+  },
+  {
+    role: 'VP of Club Management',
+    name: 'Ryan Schmitt',
+    quote: 'Every club, every student — supported, structured, and connected.',
+    photoSrc: 'https://i.imgur.com/51zeKVB.png',
+  },
+  {
+    role: 'VP of Finance',
+    name: 'Roshni Galani',
+    quote: 'Managing every dollar with clarity and purpose.',
+    photoSrc: 'https://i.imgur.com/bXZGPFd.png',
+  },
+  {
+    role: 'VP of Marketing',
+    name: 'Smiti Sarin',
+    quote: 'Newsletters you\'ll actually read. A GSC presence that feels alive.',
+    photoSrc: 'https://i.imgur.com/Ewmic2V.png',
+  },
+  {
+    role: 'VP of Partners Club',
+    name: 'Luis Eduardo Gordillo',
+    quote: 'Because partners and family are part of this journey too.',
+    photoSrc: 'https://i.imgur.com/1zaS8eD.png',
+  },
+  {
+    role: 'Chief of DEI',
+    name: 'Rashmi Tripathi',
+    quote: 'Ensuring every program and every background has a seat at the table.',
+    photoSrc: 'https://i.imgur.com/JEWZI2X.png',
+  },
+  { role: 'Chief of Operations', name: 'TBD', quote: '', pending: true },
+];
+
 const GSC_CALENDAR_EMBED_SRC =
   'https://miro.com/app/live-embed/uXjVGqVPD-Q=/?focusWidget=3458764665716147808&embedMode=view_only_without_ui&embedId=514690704532';
 
@@ -173,15 +305,504 @@ const STUDENT_VOICE_DASHBOARD_DEMO_EMBED_SRC =
 const CONTACT_EMAIL = 'rlee5@babson.edu';
 const CONTACT_EMAIL_SUBJECT = 'Build Babson Better Campaign: Get In Touch!';
 
+function formatCountdownParts(ms: number): { d: number; h: number; m: number; s: number } {
+  const sec = Math.floor(ms / 1000);
+  const d = Math.floor(sec / 86400);
+  const h = Math.floor((sec % 86400) / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = sec % 60;
+  return { d, h, m, s };
+}
+
+function CampaignTabBar({
+  activeTab,
+  setActiveTab,
+}: {
+  activeTab: 'transition' | 'archive';
+  setActiveTab: (t: 'transition' | 'archive') => void;
+}) {
+  return (
+    <div
+      className="sticky top-0 z-40 border-b border-gray-100 bg-white/95 py-3 backdrop-blur-sm"
+      role="tablist"
+      aria-label="Campaign sections"
+    >
+      <div className="flex justify-center px-6">
+        <div className="flex w-full max-w-sm items-center justify-center gap-1 rounded-full border border-gray-200 bg-gray-50 p-1">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'transition'}
+            id="tab-transition"
+            aria-controls="panel-transition"
+            onClick={() => setActiveTab('transition')}
+            className={`min-w-0 flex-1 rounded-full px-5 py-2 text-center text-[14px] transition-colors ${
+              activeTab === 'transition'
+                ? 'bg-emerald-600 font-semibold text-white shadow-sm'
+                : 'font-medium text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            What We&apos;re Building
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'archive'}
+            id="tab-archive"
+            aria-controls="panel-archive"
+            onClick={() => setActiveTab('archive')}
+            className={`min-w-0 flex-1 rounded-full px-5 py-2 text-center text-[14px] transition-colors ${
+              activeTab === 'archive'
+                ? 'bg-emerald-600 font-semibold text-white shadow-sm'
+                : 'font-medium text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            Campaign Archive
+          </button>
+        </div>
+      </div>
+      <p className="mt-2 text-center text-[12px] text-gray-500">
+        Campaign Archive · Results: {ELECTION_RESULT_DATE}
+      </p>
+    </div>
+  );
+}
+
+type ArchiveSectionsProps = {
+  gscCalendarOpen: boolean;
+  setGscCalendarOpen: (v: boolean | ((o: boolean) => boolean)) => void;
+  contactEmailOpen: boolean;
+  setContactEmailOpen: (v: boolean | ((o: boolean) => boolean)) => void;
+  dashboardDemoOpen: boolean;
+  setDashboardDemoOpen: (v: boolean | ((o: boolean) => boolean)) => void;
+  eventScheduleHydrated: boolean;
+};
+
+function ArchiveCampaignSections({
+  gscCalendarOpen,
+  setGscCalendarOpen,
+  contactEmailOpen,
+  setContactEmailOpen,
+  dashboardDemoOpen,
+  setDashboardDemoOpen,
+  eventScheduleHydrated,
+}: ArchiveSectionsProps) {
+  return (
+    <>
+      {/* Badge */}
+      <div className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 md:px-4 md:py-2 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-full text-[13px] md:text-[14px] font-semibold mb-5 mono-text uppercase tracking-wide md:tracking-wider w-fit">
+        <ShieldCheck className="h-4 w-4 shrink-0" aria-hidden />
+        <span>Ryan Lee for GSC President · MBA &apos;27</span>
+      </div>
+
+      {/* Headline */}
+      <div className="md:text-center md:max-w-2xl">
+        <p className="text-emerald-700 text-[13px] font-semibold tracking-wide uppercase mb-3 md:mb-4">
+          Done with the talking. Here to build.
+        </p>
+        <h1 className="text-[#0f1f1a] tracking-tight text-[32px] font-extrabold leading-[1.08] md:text-[52px]">
+          Build Babson Better.
+        </h1>
+        <p className="mt-4 text-emerald-700 text-[17px] md:text-xl font-semibold leading-snug md:max-w-xl md:mx-auto">
+          Bringing Everyone to the Table<span className="text-emerald-600/90"> & </span>
+          <span className="block sm:inline">Cooking up a Babson Experience for YOU.</span>
+        </p>
+        <div className="relative mt-6 w-full max-w-[min(100%,420px)] md:max-w-xl md:mx-auto aspect-[4/3] rounded-xl overflow-hidden border border-gray-100 shadow-md ring-1 ring-black/5">
+          <Image
+            src="https://i.imgur.com/1uBxjoA.jpeg"
+            alt="Ryan Lee, Build Babson Better campaign"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 672px"
+          />
+        </div>
+        <p className="mt-5 text-gray-500 text-[15px] leading-relaxed md:text-lg md:max-w-xl md:mx-auto">
+          We&apos;re at Babson for a short time—whether you&apos;re full-time, part-time, blended, or in a specialized master&apos;s. Let&apos;s make our time here count and{' '}
+          <span className="font-bold text-emerald-600">Build a Better Babson</span>
+          {' '}
+          together—something we can be proud of looking back on at Commencement and beyond 🎉
+        </p>
+        <h2 className="text-[#0f1f1a] text-[22px] font-bold tracking-tight md:text-2xl text-center mt-5 md:max-w-xl md:mx-auto">
+          Join my upcoming events to learn more!
+        </h2>
+      </div>
+
+      {/* Campaign week calendar */}
+      <section
+        className="w-full max-w-6xl mt-6 md:mt-8 md:mx-auto"
+        aria-label="Campaign week events, March 30 through April 3, including GSC Presidential Debate and potluck"
+      >
+        <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-2">
+          {CAMPAIGN_WEEK_EVENTS.map((ev) => {
+            const isPast =
+              eventScheduleHydrated && isCampaignEventPast(ev.eventEndAt, new Date());
+            return (
+              <article
+                key={ev.id}
+                aria-label={
+                  isPast
+                    ? `${ev.day} ${ev.date}, past campaign event`
+                    : `${ev.day} ${ev.date}, campaign event`
+                }
+                className={`flex flex-col overflow-hidden rounded-lg border text-center shadow-sm transition-[background-color,border-color] duration-300 ${
+                  isPast ? 'border-gray-300 bg-gray-100' : 'border-gray-200/80 bg-[#fafafa]'
+                }`}
+              >
+                <header
+                  className={`px-3 py-3 text-white ${isPast ? 'bg-gray-500' : 'bg-emerald-800'}`}
+                >
+                  <p className="text-[15px] font-bold leading-tight">{ev.day}</p>
+                  <p className="text-[13px] font-semibold text-white/95 mt-0.5">{ev.date}</p>
+                </header>
+                <div
+                  className={`relative aspect-[4/3] w-full bg-gray-100 ${isPast ? 'opacity-95' : ''}`}
+                >
+                  <Image
+                    src={ev.imageSrc}
+                    alt={`${ev.day} ${ev.date}: campaign event`}
+                    fill
+                    className={`object-cover ${isPast ? 'grayscale-[0.35]' : ''}`}
+                    sizes="(max-width: 520px) 100vw, (max-width: 1280px) 33vw, 16vw"
+                  />
+                  {isPast && (
+                    <div
+                      className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25"
+                      aria-hidden
+                    >
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg ring-4 ring-white/90">
+                        <Check
+                          className="h-8 w-8"
+                          strokeWidth={3}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <p
+                  className={`text-[13px] font-bold px-2 pt-3 pb-1 ${isPast ? 'text-gray-600' : 'text-gray-900'}`}
+                >
+                  {ev.time}
+                </p>
+                <p
+                  className={`text-[12px] leading-snug px-3 pb-3 flex-1 ${isPast ? 'text-gray-500' : 'text-gray-700'}`}
+                >
+                  {ev.description}
+                </p>
+                <div
+                  className={`mt-auto border-t py-2.5 px-2 ${isPast ? 'border-gray-300 bg-gray-50/90' : 'border-gray-200 bg-white'}`}
+                >
+                  {ev.day === 'Monday' ? (
+                    <span
+                      className={`text-[13px] font-semibold ${isPast ? 'text-gray-600' : 'text-emerald-800'}`}
+                    >
+                      In Olin Lobby
+                    </span>
+                  ) : (
+                    <div className="flex flex-col gap-2">
+                      <a
+                        href={ev.rsvpHref}
+                        className={`text-[13px] font-semibold underline underline-offset-2 ${
+                          isPast
+                            ? 'text-emerald-800/90 hover:text-emerald-900'
+                            : 'text-emerald-700 hover:text-emerald-800'
+                        }`}
+                        {...(ev.rsvpHref.startsWith('http')
+                          ? { target: '_blank', rel: 'noopener noreferrer' }
+                          : {})}
+                      >
+                        RSVP
+                      </a>
+                      {ev.footerNote && (
+                        <span
+                          className={`text-[12px] font-medium leading-snug ${isPast ? 'text-gray-500' : 'text-gray-600'}`}
+                        >
+                          {ev.footerNote}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <div className="md:text-center md:max-w-2xl md:mx-auto w-full mt-4">
+        <div className="flex flex-col gap-3 text-[13px] md:items-center md:max-w-lg md:mx-auto">
+          <div
+            className="w-full max-w-md md:mx-auto rounded-xl border border-red-200 bg-gradient-to-br from-red-50/95 to-white px-4 py-3.5 text-center shadow-sm ring-1 ring-red-900/5"
+            role="note"
+          >
+            <p className="text-[12px] font-bold uppercase tracking-wide text-red-800 mb-3">
+              Key Dates:
+            </p>
+            <div className="flex flex-col gap-2 text-[13px] text-gray-800">
+              <p className="flex flex-wrap items-center justify-center gap-2">
+                <Mic className="h-3.5 w-3.5 text-red-600 shrink-0" aria-hidden />
+                <span className="font-medium leading-snug text-center">
+                  Debate Thu Apr 2 · 12-1pm · Winn Auditorium
+                  {' · '}
+                  <a
+                    href={DEBATE_RSVP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-red-800 underline underline-offset-2 hover:text-red-900"
+                  >
+                    RSVP
+                  </a>
+                </span>
+              </p>
+              <p className="text-center">
+                Voting{' '}
+                <span className="font-semibold text-gray-900">Mon Apr 6 to Wed Apr 8</span>
+              </p>
+              <div className="w-full">
+                <button
+                  type="button"
+                  id="gsc-calendar-toggle"
+                  aria-expanded={gscCalendarOpen}
+                  aria-controls="gsc-calendar-embed"
+                  onClick={() => setGscCalendarOpen((o) => !o)}
+                  className="mt-2 inline-flex w-full max-w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-red-800 hover:text-red-900"
+                >
+                  <span>See Proposed April 2026 GSC Calendar</span>
+                  <ChevronDown
+                    className={`h-4 w-4 shrink-0 transition-transform ${gscCalendarOpen ? 'rotate-180' : ''}`}
+                    aria-hidden
+                  />
+                </button>
+                {gscCalendarOpen && (
+                  <div
+                    id="gsc-calendar-embed"
+                    className="mt-3 w-full overflow-hidden rounded-lg border border-red-200/80 bg-white shadow-sm"
+                  >
+                    <div className="relative w-full" style={{ paddingBottom: '64.58%' }}>
+                      <iframe
+                        title="Proposed April 2026 GSC Calendar"
+                        src={GSC_CALENDAR_EMBED_SRC}
+                        className="absolute left-0 top-0 h-full w-full"
+                        width={768}
+                        height={496}
+                        frameBorder={0}
+                        scrolling="no"
+                        allow="fullscreen; clipboard-read; clipboard-write"
+                        allowFullScreen
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full max-w-md md:mx-auto mt-1 rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50/95 to-white px-4 py-3.5 text-center shadow-sm ring-1 ring-emerald-900/5"
+            role="note"
+          >
+            <p className="text-[12px] font-bold uppercase tracking-wide text-emerald-800 mb-2">
+              Follow me on Instagram
+            </p>
+            <a
+              href="https://instagram.com/buildbabsonbetter"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 text-[13px] md:text-[14px] font-semibold text-emerald-700 hover:text-emerald-800 underline underline-offset-2"
+            >
+              <Instagram className="h-4 w-4 shrink-0" aria-hidden />
+              @buildbabsonbetter
+            </a>
+            <div className="mt-4 w-full border-t border-emerald-200/80 pt-4">
+              <p className="text-[12px] font-bold uppercase tracking-wide text-emerald-800 mb-2">
+                Get In Touch With Me
+              </p>
+              <button
+                type="button"
+                aria-expanded={contactEmailOpen}
+                aria-controls="contact-email-reveal"
+                onClick={() => setContactEmailOpen((o) => !o)}
+                className="inline-flex w-full max-w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-emerald-800 hover:text-emerald-900"
+              >
+                <span>rlee5[at]babson.edu</span>
+                <ChevronDown
+                  className={`h-4 w-4 shrink-0 transition-transform ${contactEmailOpen ? 'rotate-180' : ''}`}
+                  aria-hidden
+                />
+              </button>
+              {contactEmailOpen && (
+                <div
+                  id="contact-email-reveal"
+                  className="mt-3 flex justify-center"
+                >
+                  <a
+                    href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(CONTACT_EMAIL_SUBJECT)}`}
+                    className="inline-flex items-center justify-center gap-2 break-all rounded-lg border border-emerald-200 bg-white px-3 py-2 text-[13px] font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50/80"
+                  >
+                    <Mail className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden />
+                    {CONTACT_EMAIL}
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Campaign promises */}
+      <section className="w-full mt-10 md:mt-14 md:max-w-5xl md:mx-auto">
+        <h2 className="text-[#0f1f1a] text-[22px] font-bold tracking-tight md:text-2xl md:text-center">
+          Three Campaign Promises
+        </h2>
+        <div className="flex flex-col gap-3 mt-6 w-full md:grid md:grid-cols-3 md:gap-5 md:max-w-3xl md:mx-auto">
+          {features.map((f) => {
+            const [bgColor, textColor] = f.color.split(' ');
+            return (
+              <div
+                key={f.kicker}
+                className="flex flex-col items-center bg-white rounded-xl border border-gray-100 shadow-sm p-5 md:p-6 hover:shadow-md hover:border-gray-200 transition-all"
+              >
+                <div className={`flex items-center justify-center rounded-xl shrink-0 size-14 ${bgColor}`}>
+                  <f.icon className={`h-7 w-7 ${textColor}`} />
+                </div>
+                <div className="mt-4 w-full min-w-0">
+                  <p className="mono-text text-[13px] md:text-sm font-bold uppercase tracking-wider text-emerald-700 text-center mb-2">
+                    {f.kicker}
+                  </p>
+                  <p className="text-[#1a1c1c] text-[14px] font-semibold leading-tight mb-2 text-center">
+                    {f.title}
+                  </p>
+                  {f.kicker === '01 · Connect the Dots' && (
+                    <div className="relative mt-1 mb-3 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
+                      <Image
+                        src={CONNECT_THE_DOTS_IMAGE_SRC}
+                        alt="Connect the Dots — career access at Babson"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 280px"
+                      />
+                    </div>
+                  )}
+                  {f.kicker === '02 · One GSC' && (
+                    <div className="relative mt-1 mb-3 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
+                      <Image
+                        src={ONE_GSC_IMAGE_SRC}
+                        alt="One GSC — connected Babson student community"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 280px"
+                      />
+                    </div>
+                  )}
+                  {f.kicker === '03 · Build Babson Better' && (
+                    <div className="relative mt-1 mb-3 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
+                      <Image
+                        src={BUILD_BABSON_BETTER_IMAGE_SRC}
+                        alt="Build Babson Better — Student Voice Dashboard"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 280px"
+                      />
+                    </div>
+                  )}
+                  <ul className="text-gray-500 text-[13px] leading-snug space-y-1.5 list-disc pl-4 marker:text-emerald-600 text-left">
+                    {f.bullets.map((line, i) => (
+                      <li key={typeof line === 'string' ? line : `${f.kicker}-${i}`} className="pl-0.5">
+                        {line}
+                      </li>
+                    ))}
+                  </ul>
+                  {f.kicker === '03 · Build Babson Better' && (
+                    <div className="mt-4 w-full border-t border-gray-100 pt-4">
+                      <button
+                        type="button"
+                        aria-expanded={dashboardDemoOpen}
+                        aria-controls="student-voice-dashboard-demo"
+                        onClick={() => setDashboardDemoOpen((o) => !o)}
+                        className="inline-flex w-full max-w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-violet-800 hover:text-violet-900"
+                      >
+                        <span>See Student Voice Dashboard in action</span>
+                        <ChevronDown
+                          className={`h-4 w-4 shrink-0 transition-transform ${dashboardDemoOpen ? 'rotate-180' : ''}`}
+                          aria-hidden
+                        />
+                      </button>
+                      {dashboardDemoOpen && (
+                        <div
+                          id="student-voice-dashboard-demo"
+                          className="mt-3 w-full overflow-hidden rounded-lg border border-gray-200 bg-black shadow-sm"
+                        >
+                          <div className="relative mx-auto aspect-[9/16] w-full max-w-[280px]">
+                            <iframe
+                              title="Student Voice Dashboard in action"
+                              src={STUDENT_VOICE_DASHBOARD_DEMO_EMBED_SRC}
+                              className="absolute inset-0 h-full w-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                              allowFullScreen
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Desktop CTA */}
+      <div className="hidden md:flex mt-12 flex-col sm:flex-row sm:items-center gap-3">
+        <a
+          href={STUDENT_VOICE_DASHBOARD_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="min-h-[48px] py-3 px-6 bg-emerald-600 text-white rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2 hover:bg-emerald-700 transition-colors active:scale-[0.98] shadow-lg shadow-emerald-100 w-fit max-w-xl text-center leading-snug"
+        >
+          Add Idea to Student Voice Dashboard <ArrowRight className="h-4 w-4 shrink-0" />
+        </a>
+      </div>
+
+      <blockquote className="mt-12 md:mt-16 w-full max-w-2xl mx-auto rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50/90 to-white px-6 py-7 md:px-10 md:py-8 shadow-sm ring-1 ring-emerald-900/5">
+        <p className="text-center text-[#1a2e24] text-[17px] md:text-[20px] leading-snug font-medium italic tracking-tight">
+          Ask not what Babson can do for you, ask what you can do for Babson.
+        </p>
+      </blockquote>
+    </>
+  );
+}
+
 export default function HomePage() {
+  const [activeTab, setActiveTab] = useState<'transition' | 'archive'>('transition');
   const [gscCalendarOpen, setGscCalendarOpen] = useState(false);
   const [contactEmailOpen, setContactEmailOpen] = useState(false);
   const [dashboardDemoOpen, setDashboardDemoOpen] = useState(false);
   /** Past styling uses the client clock; keep false until mount so SSR and first paint match (no hydration flash). */
   const [eventScheduleHydrated, setEventScheduleHydrated] = useState(false);
+  const [adminCountdownMs, setAdminCountdownMs] = useState<number | null>(null);
+
   useEffect(() => {
     setEventScheduleHydrated(true);
   }, []);
+
+  useEffect(() => {
+    if (activeTab !== 'transition') return;
+    const end = new Date(ADMINISTRATION_START).getTime();
+    const tick = () => {
+      const diff = end - Date.now();
+      setAdminCountdownMs(diff > 0 ? diff : 0);
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [activeTab]);
+
+  const adminStarted = adminCountdownMs !== null && adminCountdownMs <= 0;
+  const countdownParts =
+    adminCountdownMs !== null && adminCountdownMs > 0
+      ? formatCountdownParts(adminCountdownMs)
+      : null;
 
   return (
     <div className="min-h-screen bg-white">
@@ -203,398 +824,350 @@ export default function HomePage() {
           </div>
         </header>
 
-        {/* Hero */}
-        <main className="flex-1 flex flex-col px-6 pt-10 pb-[120px] md:items-center md:pt-20 md:pb-32 md:px-8">
+        <CampaignTabBar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-          {/* Badge */}
-          <div className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 md:px-4 md:py-2 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-full text-[13px] md:text-[14px] font-semibold mb-5 mono-text uppercase tracking-wide md:tracking-wider w-fit">
-            <ShieldCheck className="h-4 w-4 shrink-0" aria-hidden />
-            <span>Ryan Lee for GSC President · MBA &apos;27</span>
-          </div>
+        <main className="flex flex-1 flex-col px-6 pb-[120px] pt-[52px] md:items-center md:px-8 md:pb-32 md:pt-10">
 
-          {/* Headline */}
-          <div className="md:text-center md:max-w-2xl">
-            <p className="text-emerald-700 text-[13px] font-semibold tracking-wide uppercase mb-3 md:mb-4">
-              Done with the talking. Here to build.
-            </p>
-            <h1 className="text-[#0f1f1a] tracking-tight text-[32px] font-extrabold leading-[1.08] md:text-[52px]">
-              Build Babson Better.
-            </h1>
-            <p className="mt-4 text-emerald-700 text-[17px] md:text-xl font-semibold leading-snug md:max-w-xl md:mx-auto">
-              Bringing Everyone to the Table<span className="text-emerald-600/90"> & </span>
-              <span className="block sm:inline">Cooking up a Babson Experience for YOU.</span>
-            </p>
-            <div className="relative mt-6 w-full max-w-[min(100%,420px)] md:max-w-xl md:mx-auto aspect-[4/3] rounded-xl overflow-hidden border border-gray-100 shadow-md ring-1 ring-black/5">
-              <Image
-                src="https://i.imgur.com/1uBxjoA.jpeg"
-                alt="Ryan Lee, Build Babson Better campaign"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 672px"
-                priority
-              />
-            </div>
-            <p className="mt-5 text-gray-500 text-[15px] leading-relaxed md:text-lg md:max-w-xl md:mx-auto">
-              We&apos;re at Babson for a short time—whether you&apos;re full-time, part-time, blended, or in a specialized master&apos;s. Let&apos;s make our time here count and{' '}
-              <span className="font-bold text-emerald-600">Build a Better Babson</span>
-              {' '}
-              together—something we can be proud of looking back on at Commencement and beyond 🎉
-            </p>
-            <h2 className="text-[#0f1f1a] text-[22px] font-bold tracking-tight md:text-2xl text-center mt-5 md:max-w-xl md:mx-auto">
-              Join my upcoming events to learn more!
-            </h2>
-          </div>
+          {activeTab === 'transition' ? (
+            <div
+              id="panel-transition"
+              role="tabpanel"
+              aria-labelledby="tab-transition"
+              className="flex w-full flex-col md:items-center"
+            >
+              {/* 1. Thank you banner */}
+              <div className="w-full rounded-2xl border border-emerald-100/90 bg-gradient-to-br from-emerald-50 via-emerald-100/40 to-emerald-50/90 px-4 py-5 shadow-sm ring-1 ring-emerald-900/5 md:max-w-3xl">
+                <h2 className="text-center text-[20px] font-bold tracking-tight text-emerald-900 md:text-[22px]">
+                  Thank you, Babson. Now let&apos;s build. 🙏
+                </h2>
+                <p className="mt-3 text-center text-[14px] leading-relaxed text-emerald-900/85 md:text-[15px]">
+                  The Babson graduate community elected the Build Babson Better slate on {ELECTION_RESULT_DATE}. Official handover:{' '}
+                  {OFFICIAL_HANDOVER_DATE}, post-Commencement.
+                </p>
+              </div>
 
-          {/* Campaign week calendar */}
-          <section
-            className="w-full max-w-6xl mt-6 md:mt-8 md:mx-auto"
-            aria-label="Campaign week events, March 30 through April 3, including GSC Presidential Debate and potluck"
-          >
-            <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-2">
-              {CAMPAIGN_WEEK_EVENTS.map((ev) => {
-                const isPast =
-                  eventScheduleHydrated && isCampaignEventPast(ev.eventEndAt, new Date());
-                return (
-                  <article
-                    key={ev.id}
-                    aria-label={
-                      isPast
-                        ? `${ev.day} ${ev.date}, past campaign event`
-                        : `${ev.day} ${ev.date}, campaign event`
-                    }
-                    className={`flex flex-col overflow-hidden rounded-lg border text-center shadow-sm transition-[background-color,border-color] duration-300 ${
-                      isPast ? 'border-gray-300 bg-gray-100' : 'border-gray-200/80 bg-[#fafafa]'
-                    }`}
+              {/* 2. Hero */}
+              <div className="mt-10 w-full md:max-w-2xl md:text-center">
+                <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3.5 py-1.5 text-[12px] font-semibold uppercase tracking-wide text-emerald-700 md:px-4 md:py-2 md:text-[13px]">
+                  GSC President-Elect 2026–27 · Babson Graduate Community
+                </div>
+                <p className="mt-4 text-[12px] font-semibold uppercase tracking-widest text-emerald-600 md:text-[13px]">
+                  One Babson · All In
+                </p>
+                <h1 className="mt-2 text-[32px] font-extrabold leading-[1.08] tracking-tight text-[#0f1f1a] md:text-[52px]">
+                  Build Babson Better.
+                </h1>
+                <p className="mt-4 text-[16px] font-semibold leading-snug text-emerald-800 md:mx-auto md:max-w-xl md:text-xl">
+                  We&apos;re here for a short time. Let&apos;s make it count — for every program, every student, and everyone who comes after us.
+                </p>
+                <div className="relative mx-auto mt-6 aspect-video w-full max-w-[min(100%,420px)] overflow-hidden rounded-xl border border-gray-100 shadow-sm ring-1 ring-black/5 md:max-w-xl">
+                  <Image
+                    src="https://i.imgur.com/1uBxjoA.jpeg"
+                    alt="Build Babson Better — graduate community"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 672px"
+                    priority
+                  />
+                </div>
+              </div>
+
+              {/* 3. Countdown */}
+              <section className="mt-12 w-full md:max-w-xl md:text-center" aria-label="Countdown to administration start">
+                <p className="text-center text-[13px] font-semibold text-emerald-800">Time until we get to work</p>
+                {adminStarted ? (
+                  <p className="mt-4 text-center text-[15px] font-medium leading-relaxed text-emerald-900">
+                    The work has begun. Build Babson Better is underway.
+                  </p>
+                ) : countdownParts ? (
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+                    {(
+                      [
+                        ['Days', countdownParts.d],
+                        ['Hours', countdownParts.h],
+                        ['Minutes', countdownParts.m],
+                        ['Seconds', countdownParts.s],
+                      ] as const
+                    ).map(([label, value]) => (
+                      <div
+                        key={label}
+                        className="flex min-w-[4.5rem] flex-col items-center rounded-lg border border-emerald-100 bg-emerald-50/60 px-3 py-2"
+                      >
+                        <span className="text-[22px] font-bold tabular-nums text-emerald-800 md:text-2xl">
+                          {value}
+                        </span>
+                        <span className="text-[11px] font-medium uppercase tracking-wide text-emerald-700/90">
+                          {label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-4 text-center text-[14px] text-gray-500">Loading…</p>
+                )}
+                <p className="mt-4 text-center text-[12px] text-gray-500 md:text-[13px]">
+                  Fall 2026 — full programming calendar launches
+                </p>
+              </section>
+
+              {/* 4. Student Voice Dashboard CTA */}
+              <section className="mt-12 w-full md:flex md:justify-center">
+                <div className="mx-auto w-full max-w-lg rounded-2xl border border-violet-200 bg-violet-50 px-5 py-6 text-center shadow-lg shadow-violet-100/80 ring-1 ring-violet-900/5 md:px-8 md:py-8">
+                  <h2 className="text-[20px] font-bold tracking-tight text-[#1a1c2e] md:text-[22px]">
+                    Your ideas shape what we build.
+                  </h2>
+                  <p className="mt-3 text-left text-[14px] leading-relaxed text-gray-600 md:text-[15px]">
+                    The Student Voice Dashboard is live. Drop in an idea, upvote what matters to you, and watch it move through the system. We&apos;re tracking every submission publicly — no black holes, no silence. This is how we stay accountable to you.
+                  </p>
+                  <a
+                    href={STUDENT_VOICE_DASHBOARD_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-violet-600 px-6 py-3 text-[15px] font-semibold text-white shadow-md transition-colors hover:bg-violet-700 active:scale-[0.98]"
                   >
-                    <header
-                      className={`px-3 py-3 text-white ${isPast ? 'bg-gray-500' : 'bg-emerald-800'}`}
-                    >
-                      <p className="text-[15px] font-bold leading-tight">{ev.day}</p>
-                      <p className="text-[13px] font-semibold text-white/95 mt-0.5">{ev.date}</p>
-                    </header>
+                    Add Your Idea →
+                  </a>
+                </div>
+              </section>
+
+              {/* 5. Transition timeline */}
+              <section className="mt-14 w-full md:max-w-3xl" aria-label="Transition timeline">
+                <h2 className="text-center text-[22px] font-bold tracking-tight text-[#0f1f1a] md:text-2xl">
+                  What changes now.
+                </h2>
+                <div className="relative mt-8 md:mt-10">
+                  <div
+                    className="absolute left-[11px] top-2 bottom-2 w-px bg-emerald-300 md:left-0 md:right-0 md:top-[18px] md:bottom-auto md:h-px md:w-full"
+                    aria-hidden
+                  />
+                  <ol className="relative flex flex-col gap-8 md:flex-row md:gap-4 md:pt-1">
+                    <li className="flex gap-4 md:flex-1 md:flex-col md:items-center md:text-center md:pt-6">
+                      <span className="relative z-10 mt-0.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border-2 border-emerald-500 bg-white md:mt-0" />
+                      <div>
+                        <p className="text-[13px] font-bold text-emerald-800">Now → Mid-May 2026</p>
+                        <p className="mt-1 text-[13px] leading-relaxed text-gray-600">
+                          Transition. Meeting with the outgoing GSC, learning the institutional ropes, and setting up the infrastructure.
+                        </p>
+                      </div>
+                    </li>
+                    <li className="flex gap-4 md:flex-1 md:flex-col md:items-center md:text-center md:pt-6">
+                      <span className="relative z-10 mt-0.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border-2 border-emerald-500 bg-white md:mt-0" />
+                      <div>
+                        <p className="text-[13px] font-bold text-emerald-800">Mid-May → August 2026</p>
+                        <p className="mt-1 text-[13px] leading-relaxed text-gray-600">
+                          Launch. First GSC team meeting, student body announcement, and early platform wins before fall classes begin.
+                        </p>
+                      </div>
+                    </li>
+                    <li className="flex gap-4 md:flex-1 md:flex-col md:items-center md:text-center md:pt-6">
+                      <span className="relative z-10 mt-0.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border-2 border-emerald-500 bg-white md:mt-0" />
+                      <div>
+                        <p className="text-[13px] font-bold text-emerald-800">September 2026 →</p>
+                        <p className="mt-1 text-[13px] leading-relaxed text-gray-600">
+                          Full build. Fall programming, Babson Bridge, Student Voice Dashboard in full operation.
+                        </p>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+              </section>
+
+              {/* 6. Meet the team */}
+              <section className="mt-14 w-full md:max-w-5xl" aria-label="GSC team">
+                <h2 className="text-center text-[22px] font-bold tracking-tight text-[#0f1f1a] md:text-2xl">
+                  The team stepping up.
+                </h2>
+                <p className="mx-auto mt-2 max-w-2xl text-center text-[14px] text-gray-500">
+                  Each person ran because they care about this community. Now we build together.
+                </p>
+                <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+                  {TRANSITION_TEAM.map((m) => (
                     <div
-                      className={`relative aspect-[4/3] w-full bg-gray-100 ${isPast ? 'opacity-95' : ''}`}
+                      key={`${m.role}-${m.name}`}
+                      className={`rounded-xl border p-4 shadow-sm md:p-5 ${
+                        m.pending
+                          ? 'border-gray-200 bg-gray-50/90 text-gray-500'
+                          : 'border-gray-100 bg-white ring-1 ring-black/[0.03]'
+                      }`}
                     >
-                      <Image
-                        src={ev.imageSrc}
-                        alt={`${ev.day} ${ev.date}: campaign event`}
-                        fill
-                        className={`object-cover ${isPast ? 'grayscale-[0.35]' : ''}`}
-                        sizes="(max-width: 520px) 100vw, (max-width: 1280px) 33vw, 16vw"
-                      />
-                      {isPast && (
-                        <div
-                          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25"
-                          aria-hidden
-                        >
-                          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg ring-4 ring-white/90">
-                            <Check
-                              className="h-8 w-8"
-                              strokeWidth={3}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
+                      {m.pending ? (
+                        <>
+                          <span className="inline-block rounded-full bg-gray-200 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-gray-600">
+                            ⏳ Run-off in progress
+                          </span>
+                          <p className="mt-2 text-[13px] font-bold text-gray-700">{m.role}</p>
+                          <p className="mt-1 text-[16px] font-bold text-gray-600">TBD</p>
+                        </>
+                      ) : (
+                        <div className="flex gap-4">
+                          {m.photoSrc && (
+                            <div className="relative h-[88px] w-[88px] shrink-0 overflow-hidden rounded-full bg-gray-50 ring-2 ring-emerald-100">
+                              <Image
+                                src={m.photoSrc}
+                                alt={`${m.name}, ${m.role}`}
+                                fill
+                                className="object-cover object-top"
+                                sizes="88px"
+                              />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <span className="inline-block rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-emerald-800">
+                              {m.role}
+                            </span>
+                            <p className="mt-2 text-[16px] font-bold text-[#0f1f1a]">{m.name}</p>
+                            <p className="mt-1 text-[13px] italic leading-snug text-gray-600">{m.quote}</p>
                           </div>
                         </div>
                       )}
                     </div>
-                    <p
-                      className={`text-[13px] font-bold px-2 pt-3 pb-1 ${isPast ? 'text-gray-600' : 'text-gray-900'}`}
-                    >
-                      {ev.time}
-                    </p>
-                    <p
-                      className={`text-[12px] leading-snug px-3 pb-3 flex-1 ${isPast ? 'text-gray-500' : 'text-gray-700'}`}
-                    >
-                      {ev.description}
-                    </p>
-                    <div
-                      className={`mt-auto border-t py-2.5 px-2 ${isPast ? 'border-gray-300 bg-gray-50/90' : 'border-gray-200 bg-white'}`}
-                    >
-                      {ev.day === 'Monday' ? (
-                        <span
-                          className={`text-[13px] font-semibold ${isPast ? 'text-gray-600' : 'text-emerald-800'}`}
-                        >
-                          In Olin Lobby
-                        </span>
-                      ) : (
-                        <div className="flex flex-col gap-2">
-                          <a
-                            href={ev.rsvpHref}
-                            className={`text-[13px] font-semibold underline underline-offset-2 ${
-                              isPast
-                                ? 'text-emerald-800/90 hover:text-emerald-900'
-                                : 'text-emerald-700 hover:text-emerald-800'
-                            }`}
-                            {...(ev.rsvpHref.startsWith('http')
-                              ? { target: '_blank', rel: 'noopener noreferrer' }
-                              : {})}
-                          >
-                            RSVP
-                          </a>
-                          {ev.footerNote && (
-                            <span
-                              className={`text-[12px] font-medium leading-snug ${isPast ? 'text-gray-500' : 'text-gray-600'}`}
+                  ))}
+                </div>
+              </section>
+
+              {/* 7. Pillars (transition) */}
+              <section className="mt-14 w-full md:max-w-5xl">
+                <h2 className="text-center text-[22px] font-bold tracking-tight text-[#0f1f1a] md:text-2xl">
+                  What we&apos;re building this year.
+                </h2>
+                <div className="mt-6 flex w-full flex-col gap-3 md:mx-auto md:grid md:max-w-3xl md:grid-cols-3 md:gap-5">
+                  {transitionPillars.map((f) => {
+                    const [bgColor, textColor] = f.color.split(' ');
+                    return (
+                      <div
+                        key={f.kicker}
+                        className="flex flex-col items-center rounded-xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-gray-200 hover:shadow-md md:p-6"
+                      >
+                        <div className={`flex size-14 shrink-0 items-center justify-center rounded-xl ${bgColor}`}>
+                          <f.icon className={`h-7 w-7 ${textColor}`} />
+                        </div>
+                        <div className="mt-4 w-full min-w-0">
+                          <p className="mono-text mb-2 text-center text-[13px] font-bold uppercase tracking-wider text-emerald-700 md:text-sm">
+                            {f.kicker}
+                          </p>
+                          <p className="mb-2 text-center text-[14px] font-semibold leading-tight text-[#1a1c1c]">
+                            {f.title}
+                          </p>
+                          {f.kicker === '01 · Connect the Dots' && (
+                            <div className="relative mb-3 mt-1 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
+                              <Image
+                                src={CONNECT_THE_DOTS_IMAGE_SRC}
+                                alt="Connect the Dots — career access at Babson"
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 768px) 100vw, 280px"
+                              />
+                            </div>
+                          )}
+                          {f.kicker === '02 · One GSC' && (
+                            <div className="relative mb-3 mt-1 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
+                              <Image
+                                src={ONE_GSC_IMAGE_SRC}
+                                alt="One GSC — connected Babson graduate community"
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 768px) 100vw, 280px"
+                              />
+                            </div>
+                          )}
+                          {f.kicker === '03 · Build Babson Better' && (
+                            <div className="relative mb-3 mt-1 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
+                              <Image
+                                src={BUILD_BABSON_BETTER_IMAGE_SRC}
+                                alt="Build Babson Better — Student Voice Dashboard"
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 768px) 100vw, 280px"
+                              />
+                            </div>
+                          )}
+                          <ul className="list-disc space-y-1.5 pl-4 text-left text-[13px] leading-snug text-gray-500 marker:text-emerald-600">
+                            {f.bullets.map((line, i) => (
+                              <li key={typeof line === 'string' ? line : `${f.kicker}-${i}`} className="pl-0.5">
+                                {line}
+                              </li>
+                            ))}
+                          </ul>
+                          {f.kicker === '03 · Build Babson Better' && (
+                            <a
+                              href={STUDENT_VOICE_DASHBOARD_URL}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="mt-4 inline-flex w-full min-h-[44px] items-center justify-center gap-2 rounded-xl border border-violet-200 bg-white px-4 py-2.5 text-[13px] font-semibold text-violet-800 shadow-sm transition-colors hover:bg-violet-50"
                             >
-                              {ev.footerNote}
-                            </span>
+                              See the Dashboard <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
+                            </a>
                           )}
                         </div>
-                      )}
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </section>
-
-          <div className="md:text-center md:max-w-2xl md:mx-auto w-full mt-4">
-            <div className="flex flex-col gap-3 text-[13px] md:items-center md:max-w-lg md:mx-auto">
-              <div
-                className="w-full max-w-md md:mx-auto rounded-xl border border-red-200 bg-gradient-to-br from-red-50/95 to-white px-4 py-3.5 text-center shadow-sm ring-1 ring-red-900/5"
-                role="note"
-              >
-                <p className="text-[12px] font-bold uppercase tracking-wide text-red-800 mb-3">
-                  Key Dates:
-                </p>
-                <div className="flex flex-col gap-2 text-[13px] text-gray-800">
-                  <p className="flex flex-wrap items-center justify-center gap-2">
-                    <Mic className="h-3.5 w-3.5 text-red-600 shrink-0" aria-hidden />
-                    <span className="font-medium leading-snug text-center">
-                      Debate Thu Apr 2 · 12-1pm · Winn Auditorium
-                      {' · '}
-                      <a
-                        href={DEBATE_RSVP_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold text-red-800 underline underline-offset-2 hover:text-red-900"
-                      >
-                        RSVP
-                      </a>
-                    </span>
-                  </p>
-                  <p className="text-center">
-                    Voting{' '}
-                    <span className="font-semibold text-gray-900">Mon Apr 6 to Wed Apr 8</span>
-                  </p>
-                  <div className="w-full">
-                    <button
-                      type="button"
-                      id="gsc-calendar-toggle"
-                      aria-expanded={gscCalendarOpen}
-                      aria-controls="gsc-calendar-embed"
-                      onClick={() => setGscCalendarOpen((o) => !o)}
-                      className="mt-2 inline-flex w-full max-w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-red-800 hover:text-red-900"
-                    >
-                      <span>See Proposed April 2026 GSC Calendar</span>
-                      <ChevronDown
-                        className={`h-4 w-4 shrink-0 transition-transform ${gscCalendarOpen ? 'rotate-180' : ''}`}
-                        aria-hidden
-                      />
-                    </button>
-                    {gscCalendarOpen && (
-                      <div
-                        id="gsc-calendar-embed"
-                        className="mt-3 w-full overflow-hidden rounded-lg border border-red-200/80 bg-white shadow-sm"
-                      >
-                        <div className="relative w-full" style={{ paddingBottom: '64.58%' }}>
-                          <iframe
-                            title="Proposed April 2026 GSC Calendar"
-                            src={GSC_CALENDAR_EMBED_SRC}
-                            className="absolute left-0 top-0 h-full w-full"
-                            width={768}
-                            height={496}
-                            frameBorder={0}
-                            scrolling="no"
-                            allow="fullscreen; clipboard-read; clipboard-write"
-                            allowFullScreen
-                          />
-                        </div>
                       </div>
-                    )}
-                  </div>
+                    );
+                  })}
                 </div>
-              </div>
-              <div
-                className="w-full max-w-md md:mx-auto mt-1 rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50/95 to-white px-4 py-3.5 text-center shadow-sm ring-1 ring-emerald-900/5"
-                role="note"
-              >
-                <p className="text-[12px] font-bold uppercase tracking-wide text-emerald-800 mb-2">
-                  Follow me on Instagram
+              </section>
+
+              {/* 8. Blockquote */}
+              <blockquote className="mt-12 w-full max-w-2xl rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50/90 to-white px-6 py-7 shadow-sm ring-1 ring-emerald-900/5 md:mt-16 md:px-10 md:py-8">
+                <p className="text-center text-[17px] font-medium italic leading-snug tracking-tight text-[#1a2e24] md:text-[20px]">
+                  Ask not what Babson can do for you, ask what you can do for Babson.
                 </p>
+              </blockquote>
+
+              {/* 9. Footer */}
+              <footer className="mt-10 w-full pb-2 text-center text-[14px] text-gray-600 md:mt-12">
                 <a
                   href="https://instagram.com/buildbabsonbetter"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 text-[13px] md:text-[14px] font-semibold text-emerald-700 hover:text-emerald-800 underline underline-offset-2"
+                  className="font-medium text-emerald-700 underline-offset-2 hover:text-emerald-800 hover:underline"
                 >
-                  <Instagram className="h-4 w-4 shrink-0" aria-hidden />
                   @buildbabsonbetter
                 </a>
-                <div className="mt-4 w-full border-t border-emerald-200/80 pt-4">
-                  <p className="text-[12px] font-bold uppercase tracking-wide text-emerald-800 mb-2">
-                    Get In Touch With Me
-                  </p>
-                  <button
-                    type="button"
-                    aria-expanded={contactEmailOpen}
-                    aria-controls="contact-email-reveal"
-                    onClick={() => setContactEmailOpen((o) => !o)}
-                    className="inline-flex w-full max-w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-emerald-800 hover:text-emerald-900"
-                  >
-                    <span>rlee5[at]babson.edu</span>
-                    <ChevronDown
-                      className={`h-4 w-4 shrink-0 transition-transform ${contactEmailOpen ? 'rotate-180' : ''}`}
-                      aria-hidden
-                    />
-                  </button>
-                  {contactEmailOpen && (
-                    <div
-                      id="contact-email-reveal"
-                      className="mt-3 flex justify-center"
-                    >
-                      <a
-                        href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(CONTACT_EMAIL_SUBJECT)}`}
-                        className="inline-flex items-center justify-center gap-2 break-all rounded-lg border border-emerald-200 bg-white px-3 py-2 text-[13px] font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50/80"
-                      >
-                        <Mail className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden />
-                        {CONTACT_EMAIL}
-                      </a>
-                    </div>
-                  )}
-                </div>
-              </div>
+                <span className="text-gray-400"> · </span>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="font-medium text-emerald-700 underline-offset-2 hover:text-emerald-800 hover:underline"
+                >
+                  {CONTACT_EMAIL}
+                </a>
+              </footer>
             </div>
-          </div>
-
-          {/* Campaign promises */}
-          <section className="w-full mt-10 md:mt-14 md:max-w-5xl md:mx-auto">
-            <h2 className="text-[#0f1f1a] text-[22px] font-bold tracking-tight md:text-2xl md:text-center">
-              Three Campaign Promises
-            </h2>
-            <div className="flex flex-col gap-3 mt-6 w-full md:grid md:grid-cols-3 md:gap-5 md:max-w-3xl md:mx-auto">
-              {features.map((f) => {
-                const [bgColor, textColor] = f.color.split(' ');
-                return (
-                  <div
-                    key={f.kicker}
-                    className="flex flex-col items-center bg-white rounded-xl border border-gray-100 shadow-sm p-5 md:p-6 hover:shadow-md hover:border-gray-200 transition-all"
-                  >
-                    <div className={`flex items-center justify-center rounded-xl shrink-0 size-14 ${bgColor}`}>
-                      <f.icon className={`h-7 w-7 ${textColor}`} />
-                    </div>
-                    <div className="mt-4 w-full min-w-0">
-                      <p className="mono-text text-[13px] md:text-sm font-bold uppercase tracking-wider text-emerald-700 text-center mb-2">
-                        {f.kicker}
-                      </p>
-                      <p className="text-[#1a1c1c] text-[14px] font-semibold leading-tight mb-2 text-center">
-                        {f.title}
-                      </p>
-                      {f.kicker === '01 · Connect the Dots' && (
-                        <div className="relative mt-1 mb-3 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
-                          <Image
-                            src={CONNECT_THE_DOTS_IMAGE_SRC}
-                            alt="Connect the Dots — career access at Babson"
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 280px"
-                          />
-                        </div>
-                      )}
-                      {f.kicker === '02 · One GSC' && (
-                        <div className="relative mt-1 mb-3 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
-                          <Image
-                            src={ONE_GSC_IMAGE_SRC}
-                            alt="One GSC — connected Babson student community"
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 280px"
-                          />
-                        </div>
-                      )}
-                      {f.kicker === '03 · Build Babson Better' && (
-                        <div className="relative mt-1 mb-3 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
-                          <Image
-                            src={BUILD_BABSON_BETTER_IMAGE_SRC}
-                            alt="Build Babson Better — Student Voice Dashboard"
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 280px"
-                          />
-                        </div>
-                      )}
-                      <ul className="text-gray-500 text-[13px] leading-snug space-y-1.5 list-disc pl-4 marker:text-emerald-600 text-left">
-                        {f.bullets.map((line, i) => (
-                          <li key={typeof line === 'string' ? line : `${f.kicker}-${i}`} className="pl-0.5">
-                            {line}
-                          </li>
-                        ))}
-                      </ul>
-                      {f.kicker === '03 · Build Babson Better' && (
-                        <div className="mt-4 w-full border-t border-gray-100 pt-4">
-                          <button
-                            type="button"
-                            aria-expanded={dashboardDemoOpen}
-                            aria-controls="student-voice-dashboard-demo"
-                            onClick={() => setDashboardDemoOpen((o) => !o)}
-                            className="inline-flex w-full max-w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-violet-800 hover:text-violet-900"
-                          >
-                            <span>See Student Voice Dashboard in action</span>
-                            <ChevronDown
-                              className={`h-4 w-4 shrink-0 transition-transform ${dashboardDemoOpen ? 'rotate-180' : ''}`}
-                              aria-hidden
-                            />
-                          </button>
-                          {dashboardDemoOpen && (
-                            <div
-                              id="student-voice-dashboard-demo"
-                              className="mt-3 w-full overflow-hidden rounded-lg border border-gray-200 bg-black shadow-sm"
-                            >
-                              <div className="relative mx-auto aspect-[9/16] w-full max-w-[280px]">
-                                <iframe
-                                  title="Student Voice Dashboard in action"
-                                  src={STUDENT_VOICE_DASHBOARD_DEMO_EMBED_SRC}
-                                  className="absolute inset-0 h-full w-full"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                  allowFullScreen
-                                />
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* Desktop CTA */}
-          <div className="hidden md:flex mt-12 flex-col sm:flex-row sm:items-center gap-3">
-            <Link
-              href="/login/"
-              className="min-h-[48px] py-3 px-6 bg-emerald-600 text-white rounded-xl text-[15px] font-semibold inline-flex items-center justify-center gap-2 hover:bg-emerald-700 transition-colors active:scale-[0.98] shadow-lg shadow-emerald-100 w-fit max-w-xl text-center leading-snug"
+          ) : (
+            <div
+              id="panel-archive"
+              role="tabpanel"
+              aria-labelledby="tab-archive"
+              className="flex w-full flex-col md:items-center"
             >
-              Add Idea to Student Voice Dashboard <ArrowRight className="h-4 w-4 shrink-0" />
-            </Link>
-          </div>
-
-          <blockquote className="mt-12 md:mt-16 w-full max-w-2xl mx-auto rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50/90 to-white px-6 py-7 md:px-10 md:py-8 shadow-sm ring-1 ring-emerald-900/5">
-            <p className="text-center text-[#1a2e24] text-[17px] md:text-[20px] leading-snug font-medium italic tracking-tight">
-              Ask not what Babson can do for you, ask what you can do for Babson.
-            </p>
-          </blockquote>
+              <div
+                className="mx-auto mb-6 mt-4 max-w-2xl rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-center text-[13px] text-amber-800"
+                role="note"
+              >
+                📁 Campaign Archive · Build Babson Better · Babson GSC Presidential Campaign, March 30–April 10, 2026. Results
+                announced {ELECTION_RESULT_DATE}.
+              </div>
+              <ArchiveCampaignSections
+                gscCalendarOpen={gscCalendarOpen}
+                setGscCalendarOpen={setGscCalendarOpen}
+                contactEmailOpen={contactEmailOpen}
+                setContactEmailOpen={setContactEmailOpen}
+                dashboardDemoOpen={dashboardDemoOpen}
+                setDashboardDemoOpen={setDashboardDemoOpen}
+                eventScheduleHydrated={eventScheduleHydrated}
+              />
+            </div>
+          )}
         </main>
 
         {/* Mobile bottom CTA */}
-        <div className="fixed bottom-0 left-0 w-full px-5 pt-4 pb-6 bg-white/95 backdrop-blur-sm border-t border-gray-100 md:hidden z-50 shadow-[0_-8px_20px_-4px_rgba(0,0,0,0.06)]">
-          <Link
-            href="/login/"
-            className="w-full min-h-[52px] py-3 px-3 bg-emerald-600 text-white rounded-xl text-[13px] font-semibold leading-tight flex items-center justify-center gap-2 hover:bg-emerald-700 transition-colors active:scale-[0.98] text-center"
+        <div className="fixed bottom-0 left-0 z-50 w-full border-t border-gray-100 bg-white/95 px-5 pb-6 pt-4 shadow-[0_-8px_20px_-4px_rgba(0,0,0,0.06)] backdrop-blur-sm md:hidden">
+          <a
+            href={STUDENT_VOICE_DASHBOARD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3 px-3 text-center text-[13px] font-semibold leading-tight text-white transition-colors hover:bg-emerald-700 active:scale-[0.98]"
           >
-            Add Idea to Student Voice Dashboard <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
-          </Link>
+            Add Your Idea to the Dashboard →
+          </a>
         </div>
       </div>
     </div>
