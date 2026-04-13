@@ -15,16 +15,21 @@ import {
   Mail,
 } from 'lucide-react';
 
-const ADMINISTRATION_START = '2026-09-01T00:00:00-04:00';
-// Placeholder — update when GSC confirms Fall 2026 official kickoff
+/** Graduate ceremony: Sat May 16, 2026, 2:45 p.m. ET (procession; Babson Graduate Commencement). */
+const GRADUATE_COMMENCEMENT_AT = '2026-05-16T14:45:00-04:00';
 const OFFICIAL_HANDOVER_DATE = 'Mid-May 2026';
 const STUDENT_VOICE_DASHBOARD_URL = 'https://buildbabsonbetter.com/dashboard';
 // Update with real route
 const ELECTION_RESULT_DATE = 'April 10, 2026';
 
+/** Babson's elected graduate student government — spell out on first mention in each major area; then "GSC" is fine. */
+const GSC_LONG = 'Graduate Student Council (GSC)';
+
 const HOLI_ENGAGE_URL = 'https://engage.babson.edu/rsvp?id=376170';
 
 const DEBATE_RSVP_URL = 'https://cglink.me/22L/r376207';
+
+const BEERS_AND_BANTER_INSTAGRAM_URL = 'https://www.instagram.com/beers.and.banter/';
 
 const CONNECT_THE_DOTS_IMAGE_SRC = 'https://i.imgur.com/YliOPwp.jpeg';
 const ONE_GSC_IMAGE_SRC = 'https://i.imgur.com/da14xjC.jpeg';
@@ -87,7 +92,7 @@ const CAMPAIGN_WEEK_EVENTS: {
     time: '12-1pm',
     eventEndAt: '2026-04-02T13:00:00-04:00',
     description:
-      "GSC Presidential Debate by Graduate Student Council—hear candidates' platforms, ask questions, and vote informed. Food provided.",
+      "Graduate Student Council presidential debate — hear candidates' platforms, ask questions, and vote informed. Food provided.",
     rsvpHref: DEBATE_RSVP_URL,
     imageSrc: 'https://i.imgur.com/uqXWZ4w.jpeg',
     footerNote: 'Winn Auditorium',
@@ -133,8 +138,8 @@ const features: {
     title: 'Career access that fits your profile',
     bullets: [
       'Work with GradCCD to shift generic career events toward warm-intro, industry-specific sessions',
-      'Host Babson Bridge alumni speaker series with various clubs that are job and career focused',
-      'GSC International Student Networking Track for students building networks from scratch',
+      'Host alumni speaker series with clubs — sessions built around jobs and careers',
+      'Graduate Student Council international student networking track for students building networks from scratch',
     ],
   },
   {
@@ -144,7 +149,7 @@ const features: {
     title: 'No silos and one connected student body across every program',
     bullets: [
       'One GSC for all graduate students: 1Y, Part-Time, and 2Y MBAs; Blended Learning & Miami MBAs; MSEL; MSBA; and MSF.',
-      'Host regular cross-program socials and mixers (e.g. Biweekly Rogers Pub Mixers, GSC BBQs, etc.)',
+      'Host regular cross-program socials and mixers (e.g. Biweekly Rogers Pub Mixers, council BBQs, etc.)',
       (
         <>
           Cross-Cultural Events Calendar: See upcoming cultural events hosted by the greater Babson community like our annual{' '}
@@ -183,8 +188,8 @@ const transitionPillars: {
     title: 'We connect career access to your profile',
     bullets: [
       'We\'re working with GradCCD to shift generic career events toward warm-intro, industry-specific sessions',
-      'We\'re hosting Babson Bridge alumni speaker series with various clubs that are job and career focused',
-      'We\'re running a GSC International Student Networking Track for students building networks from scratch',
+      'We\'re hosting alumni speaker series with clubs — sessions built around jobs and careers',
+      'We\'re running a Graduate Student Council international student networking track for students building networks from scratch',
     ],
   },
   {
@@ -194,7 +199,7 @@ const transitionPillars: {
     title: 'We\'re one connected student body across every program',
     bullets: [
       'We\'re one GSC for all graduate students: 1Y, Part-Time, and 2Y MBAs; Blended Learning & Miami MBAs; MSEL; MSBA; and MSF.',
-      'We\'re hosting regular cross-program socials and mixers (e.g. Biweekly Rogers Pub Mixers, GSC BBQs, etc.)',
+      'We\'re hosting regular cross-program socials and mixers (e.g. Biweekly Rogers Pub Mixers, council BBQs, etc.)',
       (
         <>
           Cross-Cultural Events Calendar: we surface cultural events across Babson—like our annual{' '}
@@ -222,7 +227,7 @@ const transitionPillars: {
 const TRANSITION_TEAM: {
   role: string;
   name: string;
-  quote: string;
+  quote: string | ReactNode;
   photoSrc?: string;
   pending?: boolean;
 }[] = [
@@ -234,26 +239,39 @@ const TRANSITION_TEAM: {
   },
   {
     role: 'Chief of Staff',
-    name: 'Delzaan Sutaria',
+    name: "Delzaan Sutaria, MBA '27",
     quote: 'Structure, clarity, and follow-through — turning student voice into outcomes.',
     photoSrc: 'https://i.imgur.com/xsiB4cz.png',
   },
   {
     role: 'Chief of Academic Affairs',
-    name: 'Jake Rossetto',
+    name: "Jake Rossetto, MBA '27",
     quote: 'Making sure your electives actually align with your goals.',
     photoSrc: 'https://i.imgur.com/IFNwl3C.png',
   },
   {
     role: 'Chief of Graduate Student Life',
     name: "Rahul Luthra, MBA '27",
-    quote: 'Founder of Beers & Banter. Building the moments you\'ll remember.',
+    quote: (
+      <>
+        Founder of{' '}
+        <a
+          href={BEERS_AND_BANTER_INSTAGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={engageLinkClass}
+        >
+          Beers &amp; Banter
+        </a>
+        . Building the moments you&apos;ll remember.
+      </>
+    ),
     photoSrc: 'https://i.imgur.com/JhLnw02.png',
   },
   {
     role: 'Co-VP of Events',
-    name: 'Alia Nizam',
-    quote: 'From class bonding to city adventures — making GSC events actually fun.',
+    name: "Alia Nizam, MBA '27",
+    quote: 'From class bonding to city adventures — making council events actually fun.',
     photoSrc: 'https://i.imgur.com/cVPB1Cw.png',
   },
   {
@@ -264,31 +282,31 @@ const TRANSITION_TEAM: {
   },
   {
     role: 'VP of Club Management',
-    name: 'Ryan Schmitt',
+    name: "Ryan Schmitt, MBA '27",
     quote: 'Every club, every student — supported, structured, and connected.',
     photoSrc: 'https://i.imgur.com/51zeKVB.png',
   },
   {
     role: 'VP of Finance',
-    name: 'Roshni Galani',
+    name: "Roshni Galani, MBA '27",
     quote: 'Managing every dollar with clarity and purpose.',
     photoSrc: 'https://i.imgur.com/bXZGPFd.png',
   },
   {
     role: 'VP of Marketing',
-    name: 'Smiti Sarin',
-    quote: 'Newsletters you\'ll actually read. A GSC presence that feels alive.',
+    name: "Smiti Sarin, MBA '27",
+    quote: 'Newsletters you\'ll actually read. A Graduate Student Council presence that feels alive.',
     photoSrc: 'https://i.imgur.com/Ewmic2V.png',
   },
   {
     role: 'VP of Partners Club',
-    name: 'Luis Eduardo Gordillo',
+    name: "Luis Eduardo Gordillo, MBA '27",
     quote: 'Because partners and family are part of this journey too.',
     photoSrc: 'https://i.imgur.com/1zaS8eD.png',
   },
   {
     role: 'Chief of DEI',
-    name: 'Rashmi Tripathi',
+    name: "Rashmi Tripathi, MBA '27",
     quote: 'Ensuring every program and every background has a seat at the table.',
     photoSrc: 'https://i.imgur.com/JEWZI2X.png',
   },
@@ -392,7 +410,7 @@ function ArchiveCampaignSections({
       {/* Badge */}
       <div className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 md:px-4 md:py-2 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-full text-[13px] md:text-[14px] font-semibold mb-5 mono-text uppercase tracking-wide md:tracking-wider w-fit">
         <ShieldCheck className="h-4 w-4 shrink-0" aria-hidden />
-        <span>Ryan Lee for GSC President · MBA &apos;27</span>
+        <span>Ryan Lee for Graduate Student Council President · MBA &apos;27</span>
       </div>
 
       {/* Headline */}
@@ -430,7 +448,7 @@ function ArchiveCampaignSections({
       {/* Campaign week calendar */}
       <section
         className="w-full max-w-6xl mt-6 md:mt-8 md:mx-auto"
-        aria-label="Campaign week events, March 30 through April 3, including GSC Presidential Debate and potluck"
+        aria-label="Campaign week events, March 30 through April 3, including Graduate Student Council presidential debate and potluck"
       >
         <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-2">
           {CAMPAIGN_WEEK_EVENTS.map((ev) => {
@@ -568,7 +586,7 @@ function ArchiveCampaignSections({
                   onClick={() => setGscCalendarOpen((o) => !o)}
                   className="mt-2 inline-flex w-full max-w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-red-800 hover:text-red-900"
                 >
-                  <span>See Proposed April 2026 GSC Calendar</span>
+                  <span>See Proposed April 2026 Graduate Student Council Calendar</span>
                   <ChevronDown
                     className={`h-4 w-4 shrink-0 transition-transform ${gscCalendarOpen ? 'rotate-180' : ''}`}
                     aria-hidden
@@ -581,7 +599,7 @@ function ArchiveCampaignSections({
                   >
                     <div className="relative w-full" style={{ paddingBottom: '64.58%' }}>
                       <iframe
-                        title="Proposed April 2026 GSC Calendar"
+                        title="Proposed April 2026 Graduate Student Council calendar"
                         src={GSC_CALENDAR_EMBED_SRC}
                         className="absolute left-0 top-0 h-full w-full"
                         width={768}
@@ -654,7 +672,12 @@ function ArchiveCampaignSections({
         <h2 className="text-[#0f1f1a] text-[22px] font-bold tracking-tight md:text-2xl md:text-center">
           Three Campaign Promises
         </h2>
-        <div className="flex flex-col gap-3 mt-6 w-full md:grid md:grid-cols-3 md:gap-5 md:max-w-3xl md:mx-auto">
+        <p className="mx-auto mt-2 max-w-lg text-center text-[12px] leading-snug text-gray-500 md:text-[13px]">
+          <span className="font-semibold text-gray-600">GSC</span> stands for{' '}
+          <span className="font-semibold text-gray-600">Graduate Student Council</span>
+          — Babson&apos;s elected government for graduate students.
+        </p>
+        <div className="flex flex-col gap-3 mt-5 w-full md:grid md:grid-cols-3 md:gap-5 md:max-w-3xl md:mx-auto">
           {features.map((f) => {
             const [bgColor, textColor] = f.color.split(' ');
             return (
@@ -687,7 +710,7 @@ function ArchiveCampaignSections({
                     <div className="relative mt-1 mb-3 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
                       <Image
                         src={ONE_GSC_IMAGE_SRC}
-                        alt="One GSC — connected Babson student community"
+                        alt="One Graduate Student Council — connected Babson student community"
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, 280px"
@@ -780,7 +803,7 @@ export default function HomePage() {
   const [dashboardDemoOpen, setDashboardDemoOpen] = useState(false);
   /** Past styling uses the client clock; keep false until mount so SSR and first paint match (no hydration flash). */
   const [eventScheduleHydrated, setEventScheduleHydrated] = useState(false);
-  const [adminCountdownMs, setAdminCountdownMs] = useState<number | null>(null);
+  const [commencementCountdownMs, setCommencementCountdownMs] = useState<number | null>(null);
 
   useEffect(() => {
     setEventScheduleHydrated(true);
@@ -788,20 +811,20 @@ export default function HomePage() {
 
   useEffect(() => {
     if (activeTab !== 'transition') return;
-    const end = new Date(ADMINISTRATION_START).getTime();
+    const end = new Date(GRADUATE_COMMENCEMENT_AT).getTime();
     const tick = () => {
       const diff = end - Date.now();
-      setAdminCountdownMs(diff > 0 ? diff : 0);
+      setCommencementCountdownMs(diff > 0 ? diff : 0);
     };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [activeTab]);
 
-  const adminStarted = adminCountdownMs !== null && adminCountdownMs <= 0;
+  const commencementPassed = commencementCountdownMs !== null && commencementCountdownMs <= 0;
   const countdownParts =
-    adminCountdownMs !== null && adminCountdownMs > 0
-      ? formatCountdownParts(adminCountdownMs)
+    commencementCountdownMs !== null && commencementCountdownMs > 0
+      ? formatCountdownParts(commencementCountdownMs)
       : null;
 
   return (
@@ -812,7 +835,7 @@ export default function HomePage() {
       <div className="relative flex min-h-screen w-full flex-col sm:max-w-[420px] sm:mx-auto md:max-w-none">
 
         {/* Top nav */}
-        <header className="flex flex-col gap-0.5 px-6 pt-6 md:px-16 md:pt-8">
+        <header className="flex flex-col gap-1.5 px-6 pt-6 md:px-16 md:pt-8">
           <div className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 shadow-sm">
               <svg width="15" height="15" viewBox="0 0 14 14" fill="none">
@@ -822,6 +845,9 @@ export default function HomePage() {
             </div>
             <span className="text-[15px] font-bold tracking-tight text-emerald-800 leading-tight">Build Babson Better</span>
           </div>
+          <p className="text-[12px] leading-snug text-gray-600 md:max-w-2xl">
+            {GSC_LONG} — Babson&apos;s elected voice for graduate students.
+          </p>
         </header>
 
         <CampaignTabBar activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -848,8 +874,11 @@ export default function HomePage() {
 
               {/* 2. Hero */}
               <div className="mt-10 w-full md:max-w-2xl md:text-center">
-                <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3.5 py-1.5 text-[12px] font-semibold uppercase tracking-wide text-emerald-700 md:px-4 md:py-2 md:text-[13px]">
-                  GSC President-Elect 2026–27 · Babson Graduate Community
+                <div className="inline-flex max-w-full flex-col items-center gap-1 rounded-2xl border border-emerald-100 bg-emerald-50 px-3.5 py-2.5 text-center md:px-4 md:py-3">
+                  <span className="text-[13px] font-semibold text-emerald-800 md:text-[14px]">{GSC_LONG}</span>
+                  <span className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700 md:text-[12px] md:tracking-wider">
+                    President-Elect 2026–27 · Babson Graduate Community
+                  </span>
                 </div>
                 <p className="mt-4 text-[12px] font-semibold uppercase tracking-widest text-emerald-600 md:text-[13px]">
                   One Babson · All In
@@ -872,12 +901,12 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* 3. Countdown */}
-              <section className="mt-12 w-full md:max-w-xl md:text-center" aria-label="Countdown to administration start">
-                <p className="text-center text-[13px] font-semibold text-emerald-800">Time until we get to work</p>
-                {adminStarted ? (
+              {/* 3. Countdown — Babson Graduate Commencement 2026 */}
+              <section className="mt-12 w-full md:max-w-xl md:text-center" aria-label="Countdown to Babson Graduate Commencement 2026">
+                <p className="text-center text-[13px] font-semibold text-emerald-800">Time until Graduate Commencement</p>
+                {commencementPassed ? (
                   <p className="mt-4 text-center text-[15px] font-medium leading-relaxed text-emerald-900">
-                    The work has begun. Build Babson Better is underway.
+                    Graduate Commencement is here. After this weekend we transition — then we build toward fall.
                   </p>
                 ) : countdownParts ? (
                   <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
@@ -906,7 +935,7 @@ export default function HomePage() {
                   <p className="mt-4 text-center text-[14px] text-gray-500">Loading…</p>
                 )}
                 <p className="mt-4 text-center text-[12px] text-gray-500 md:text-[13px]">
-                  Fall 2026 — full programming calendar launches
+                  Saturday, May 16, 2026 · Graduate ceremony begins 2:45 p.m. Eastern
                 </p>
               </section>
 
@@ -946,7 +975,7 @@ export default function HomePage() {
                       <div>
                         <p className="text-[13px] font-bold text-emerald-800">Now → Mid-May 2026</p>
                         <p className="mt-1 text-[13px] leading-relaxed text-gray-600">
-                          Transition. Meeting with the outgoing GSC, learning the institutional ropes, and setting up the infrastructure.
+                          Transition. Meeting with the outgoing Graduate Student Council, learning the institutional ropes, and setting up the infrastructure.
                         </p>
                       </div>
                     </li>
@@ -955,16 +984,16 @@ export default function HomePage() {
                       <div>
                         <p className="text-[13px] font-bold text-emerald-800">Mid-May → August 2026</p>
                         <p className="mt-1 text-[13px] leading-relaxed text-gray-600">
-                          Launch. First GSC team meeting, student body announcement, and early platform wins before fall classes begin.
+                          Launch. First Graduate Student Council team meeting, student body announcement, and early platform wins before fall classes begin.
                         </p>
                       </div>
                     </li>
                     <li className="flex gap-4 md:flex-1 md:flex-col md:items-center md:text-center md:pt-6">
                       <span className="relative z-10 mt-0.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border-2 border-emerald-500 bg-white md:mt-0" />
                       <div>
-                        <p className="text-[13px] font-bold text-emerald-800">September 2026 →</p>
+                        <p className="text-[13px] font-bold text-emerald-800">Fall 2026 onward</p>
                         <p className="mt-1 text-[13px] leading-relaxed text-gray-600">
-                          Full build. Fall programming, Babson Bridge, Student Voice Dashboard in full operation.
+                          Full term. Classes are back, programming is in full swing, and the Student Voice Dashboard is how we keep hearing from you.
                         </p>
                       </div>
                     </li>
@@ -973,7 +1002,7 @@ export default function HomePage() {
               </section>
 
               {/* 6. Meet the team */}
-              <section className="mt-14 w-full md:max-w-5xl" aria-label="GSC team">
+              <section className="mt-14 w-full md:max-w-5xl" aria-label="Graduate Student Council team">
                 <h2 className="text-center text-[22px] font-bold tracking-tight text-[#0f1f1a] md:text-2xl">
                   The team stepping up.
                 </h2>
@@ -1030,7 +1059,12 @@ export default function HomePage() {
                 <h2 className="text-center text-[22px] font-bold tracking-tight text-[#0f1f1a] md:text-2xl">
                   What we&apos;re building this year.
                 </h2>
-                <div className="mt-6 flex w-full flex-col gap-3 md:mx-auto md:grid md:max-w-3xl md:grid-cols-3 md:gap-5">
+                <p className="mx-auto mt-2 max-w-lg text-center text-[12px] leading-snug text-gray-500 md:text-[13px]">
+                  <span className="font-semibold text-gray-600">GSC</span> stands for{' '}
+                  <span className="font-semibold text-gray-600">Graduate Student Council</span>
+                  — Babson&apos;s elected government for graduate students.
+                </p>
+                <div className="mt-5 flex w-full flex-col gap-3 md:mx-auto md:grid md:max-w-3xl md:grid-cols-3 md:gap-5">
                   {transitionPillars.map((f) => {
                     const [bgColor, textColor] = f.color.split(' ');
                     return (
@@ -1063,7 +1097,7 @@ export default function HomePage() {
                             <div className="relative mb-3 mt-1 aspect-[4/3] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm">
                               <Image
                                 src={ONE_GSC_IMAGE_SRC}
-                                alt="One GSC — connected Babson graduate community"
+                                alt="One Graduate Student Council — connected Babson graduate community"
                                 fill
                                 className="object-cover"
                                 sizes="(max-width: 768px) 100vw, 280px"
@@ -1142,8 +1176,8 @@ export default function HomePage() {
                 className="mx-auto mb-6 mt-4 max-w-2xl rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-center text-[13px] text-amber-800"
                 role="note"
               >
-                📁 Campaign Archive · Build Babson Better · Babson GSC Presidential Campaign, March 30–April 10, 2026. Results
-                announced {ELECTION_RESULT_DATE}.
+                📁 Campaign Archive · Build Babson Better · Babson Graduate Student Council (GSC) presidential campaign, March
+                30–April 10, 2026. Results announced {ELECTION_RESULT_DATE}.
               </div>
               <ArchiveCampaignSections
                 gscCalendarOpen={gscCalendarOpen}
