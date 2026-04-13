@@ -129,6 +129,7 @@ const TRANSITION_UPCOMING_EVENTS: {
   location: string;
   description: string;
   rsvpHref?: string;
+  ctaLabel?: string;
   imageSrc: string;
 }[] = [
   {
@@ -137,7 +138,7 @@ const TRANSITION_UPCOMING_EVENTS: {
     day: 'Wednesday',
     date: 'April 15',
     time: '5:30pm - 7:00pm',
-    location: 'Knight Auditorium, United States',
+    location: 'Knight Auditorium',
     description:
       'The Graduate International Dinner (International Dinner) is an opportunity to celebrate the cultural diversity of Babson’s graduate student population. Through this long-standing annual event, graduate students and partners come together in a display of culture through food, music, dance. Grad Student Partners are welcome!!',
     rsvpHref: 'https://engage.babson.edu/gsc/rsvp_boot?id=376123',
@@ -164,6 +165,7 @@ const TRANSITION_UPCOMING_EVENTS: {
     location: 'Graduate Ceremony',
     description: 'Tickets are not required for this ceremony.',
     rsvpHref: 'https://www.babson.edu/commencement/',
+    ctaLabel: 'More Info',
     imageSrc: 'https://i.imgur.com/UXr2S56.jpeg',
   },
 ];
@@ -1103,7 +1105,7 @@ export default function HomePage() {
                             rel="noopener noreferrer"
                             className="text-[13px] font-semibold text-emerald-700 underline underline-offset-2 hover:text-emerald-800"
                           >
-                            RSVP
+                            {ev.ctaLabel ?? 'RSVP'}
                           </a>
                         ) : (
                           <span className="text-[13px] font-semibold text-gray-600">Details above</span>
