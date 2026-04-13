@@ -229,6 +229,7 @@ const TRANSITION_TEAM: {
   name: string;
   quote: string | ReactNode;
   photoSrc?: string;
+  linkedinUrl?: string;
   pending?: boolean;
 }[] = [
   {
@@ -236,18 +237,21 @@ const TRANSITION_TEAM: {
     name: "Ryan Lee, MBA '27",
     quote: 'Here to build what we talked about — together.',
     photoSrc: 'https://i.imgur.com/wUwSq8F.png',
+    linkedinUrl: 'https://www.linkedin.com/in/ryanchenlee/',
   },
   {
     role: 'Chief of Staff',
     name: "Delzaan Sutaria, MBA '27",
     quote: 'Structure, clarity, and follow-through — turning student voice into outcomes.',
     photoSrc: 'https://i.imgur.com/xsiB4cz.png',
+    linkedinUrl: 'https://www.linkedin.com/in/delzaansutaria/',
   },
   {
     role: 'Chief of Academic Affairs',
     name: "Jake Rossetto, MBA '27",
     quote: 'Making sure your electives actually align with your goals.',
     photoSrc: 'https://i.imgur.com/IFNwl3C.png',
+    linkedinUrl: 'https://www.linkedin.com/in/jakerossetto/',
   },
   {
     role: 'Chief of Graduate Student Life',
@@ -267,48 +271,56 @@ const TRANSITION_TEAM: {
       </>
     ),
     photoSrc: 'https://i.imgur.com/JhLnw02.png',
+    linkedinUrl: 'https://www.linkedin.com/in/rluthra1',
   },
   {
     role: 'Co-VP of Events',
     name: "Alia Nizam, MBA '27",
     quote: 'From class bonding to city adventures — making council events actually fun.',
     photoSrc: 'https://i.imgur.com/cVPB1Cw.png',
+    linkedinUrl: 'https://www.linkedin.com/in/alia-nizam-325a3a158/',
   },
   {
     role: 'VP of CCD Relations',
     name: "Daniel Sousa Queiroz, MBA '27",
     quote: 'Expanding recruiter reach and making career access real for every program.',
     photoSrc: 'https://i.imgur.com/nVTEUPN.png',
+    linkedinUrl: 'https://www.linkedin.com/in/daniel-queiroz-mba-babson',
   },
   {
     role: 'VP of Club Management',
     name: "Ryan Schmitt, MBA '27",
     quote: 'Every club, every student — supported, structured, and connected.',
     photoSrc: 'https://i.imgur.com/51zeKVB.png',
+    linkedinUrl: 'https://www.linkedin.com/in/ryan-schmitt1/',
   },
   {
     role: 'VP of Finance',
     name: "Roshni Galani, MBA '27",
     quote: 'Managing every dollar with clarity and purpose.',
     photoSrc: 'https://i.imgur.com/bXZGPFd.png',
+    linkedinUrl: 'https://www.linkedin.com/in/roshni-galani-/',
   },
   {
     role: 'VP of Marketing',
     name: "Smiti Sarin, MBA '27",
     quote: 'Newsletters you\'ll actually read. A Graduate Student Council presence that feels alive.',
     photoSrc: 'https://i.imgur.com/Ewmic2V.png',
+    linkedinUrl: 'https://www.linkedin.com/in/smitisarin/',
   },
   {
     role: 'VP of Partners Club',
     name: "Luis Eduardo Gordillo, MBA '27",
     quote: 'Because partners and family are part of this journey too.',
     photoSrc: 'https://i.imgur.com/1zaS8eD.png',
+    linkedinUrl: 'https://www.linkedin.com/in/luis-gordillo/',
   },
   {
     role: 'Chief of DEI',
     name: "Rashmi Tripathi, MBA '27",
     quote: 'Ensuring every program and every background has a seat at the table.',
     photoSrc: 'https://i.imgur.com/JEWZI2X.png',
+    linkedinUrl: 'https://www.linkedin.com/in/rashmi-tripathi1/',
   },
   { role: 'Chief of Operations', name: 'TBD', quote: '', pending: true },
 ];
@@ -1045,6 +1057,23 @@ export default function HomePage() {
                               {m.role}
                             </span>
                             <p className="mt-2 text-[16px] font-bold text-[#0f1f1a]">{m.name}</p>
+                            {m.linkedinUrl && (
+                              <a
+                                href={m.linkedinUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={`${m.name} LinkedIn profile`}
+                                className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-[#0A66C2]/20 bg-[#0A66C2]/10 px-2.5 py-1 text-[12px] font-semibold text-[#0A66C2] transition-colors hover:bg-[#0A66C2]/15"
+                              >
+                                <span
+                                  aria-hidden
+                                  className="inline-flex h-4 w-4 items-center justify-center rounded-[3px] bg-[#0A66C2] text-[10px] font-extrabold leading-none text-white"
+                                >
+                                  in
+                                </span>
+                                LinkedIn
+                              </a>
+                            )}
                             <p className="mt-1 text-[13px] italic leading-snug text-gray-600">{m.quote}</p>
                           </div>
                         </div>
