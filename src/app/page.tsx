@@ -15,9 +15,9 @@ import {
   Mail,
 } from 'lucide-react';
 
-/** Graduate ceremony: Sat May 16, 2026, 2:45 p.m. ET (procession; Babson Graduate Commencement). */
-const GRADUATE_COMMENCEMENT_AT = '2026-05-16T14:45:00-04:00';
-const OFFICIAL_HANDOVER_DATE = 'Mid-May 2026';
+/** Official GSC handover to the new administration (first weekday after Graduate Commencement weekend). */
+const NEW_ADMINISTRATION_HANDOVER_AT = '2026-05-18T09:00:00-04:00';
+const OFFICIAL_HANDOVER_DATE = 'Monday, May 18, 2026';
 const STUDENT_VOICE_DASHBOARD_URL = 'https://buildbabsonbetter.com/dashboard';
 // Update with real route
 const ELECTION_RESULT_DATE = 'April 10, 2026';
@@ -803,7 +803,7 @@ export default function HomePage() {
   const [dashboardDemoOpen, setDashboardDemoOpen] = useState(false);
   /** Past styling uses the client clock; keep false until mount so SSR and first paint match (no hydration flash). */
   const [eventScheduleHydrated, setEventScheduleHydrated] = useState(false);
-  const [commencementCountdownMs, setCommencementCountdownMs] = useState<number | null>(null);
+  const [handoverCountdownMs, setHandoverCountdownMs] = useState<number | null>(null);
 
   useEffect(() => {
     setEventScheduleHydrated(true);
@@ -811,20 +811,20 @@ export default function HomePage() {
 
   useEffect(() => {
     if (activeTab !== 'transition') return;
-    const end = new Date(GRADUATE_COMMENCEMENT_AT).getTime();
+    const end = new Date(NEW_ADMINISTRATION_HANDOVER_AT).getTime();
     const tick = () => {
       const diff = end - Date.now();
-      setCommencementCountdownMs(diff > 0 ? diff : 0);
+      setHandoverCountdownMs(diff > 0 ? diff : 0);
     };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [activeTab]);
 
-  const commencementPassed = commencementCountdownMs !== null && commencementCountdownMs <= 0;
+  const handoverReached = handoverCountdownMs !== null && handoverCountdownMs <= 0;
   const countdownParts =
-    commencementCountdownMs !== null && commencementCountdownMs > 0
-      ? formatCountdownParts(commencementCountdownMs)
+    handoverCountdownMs !== null && handoverCountdownMs > 0
+      ? formatCountdownParts(handoverCountdownMs)
       : null;
 
   return (
@@ -868,7 +868,7 @@ export default function HomePage() {
                 </h2>
                 <p className="mt-3 text-center text-[14px] leading-relaxed text-emerald-900/85 md:text-[15px]">
                   The Babson graduate community elected the Build Babson Better slate on {ELECTION_RESULT_DATE}. Official handover:{' '}
-                  {OFFICIAL_HANDOVER_DATE}, post-Commencement.
+                  {OFFICIAL_HANDOVER_DATE}.
                 </p>
               </div>
 
@@ -901,12 +901,12 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* 3. Countdown — Babson Graduate Commencement 2026 */}
-              <section className="mt-12 w-full md:max-w-xl md:text-center" aria-label="Countdown to Babson Graduate Commencement 2026">
-                <p className="text-center text-[13px] font-semibold text-emerald-800">Time until Graduate Commencement</p>
-                {commencementPassed ? (
+              {/* 3. Countdown — new GSC administration handover */}
+              <section className="mt-12 w-full md:max-w-xl md:text-center" aria-label="Countdown to official GSC handover 2026">
+                <p className="text-center text-[13px] font-semibold text-emerald-800">Time until official handover</p>
+                {handoverReached ? (
                   <p className="mt-4 text-center text-[15px] font-medium leading-relaxed text-emerald-900">
-                    Graduate Commencement is here. After this weekend we transition — then we build toward fall.
+                    The new administration is here. Thank you for your trust — now we build toward fall and beyond.
                   </p>
                 ) : countdownParts ? (
                   <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
@@ -935,7 +935,7 @@ export default function HomePage() {
                   <p className="mt-4 text-center text-[14px] text-gray-500">Loading…</p>
                 )}
                 <p className="mt-4 text-center text-[12px] text-gray-500 md:text-[13px]">
-                  Saturday, May 16, 2026 · Graduate ceremony begins 2:45 p.m. Eastern
+                  {OFFICIAL_HANDOVER_DATE} · GSC handover at 9:00 a.m. Eastern
                 </p>
               </section>
 
@@ -1146,23 +1146,26 @@ export default function HomePage() {
                 </p>
               </blockquote>
 
-              {/* 9. Footer */}
-              <footer className="mt-10 w-full pb-2 text-center text-[14px] text-gray-600 md:mt-12">
-                <a
-                  href="https://instagram.com/buildbabsonbetter"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-emerald-700 underline-offset-2 hover:text-emerald-800 hover:underline"
+              {/* 9. Footer — Instagram callout */}
+              <footer className="mt-10 w-full pb-2 md:mt-12">
+                <div
+                  className="mx-auto w-full max-w-md rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50/95 to-white px-5 py-4 text-center shadow-sm ring-1 ring-emerald-900/5"
+                  role="note"
+                  aria-label="Follow Build Babson Better on Instagram"
                 >
-                  @buildbabsonbetter
-                </a>
-                <span className="text-gray-400"> · </span>
-                <a
-                  href={`mailto:${CONTACT_EMAIL}`}
-                  className="font-medium text-emerald-700 underline-offset-2 hover:text-emerald-800 hover:underline"
-                >
-                  {CONTACT_EMAIL}
-                </a>
+                  <p className="mb-2 text-[12px] font-bold uppercase tracking-wide text-emerald-800">
+                    Follow us on Instagram
+                  </p>
+                  <a
+                    href="https://instagram.com/buildbabsonbetter"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 text-[14px] font-semibold text-emerald-700 underline underline-offset-2 hover:text-emerald-800"
+                  >
+                    <Instagram className="h-4 w-4 shrink-0" aria-hidden />
+                    @buildbabsonbetter
+                  </a>
+                </div>
               </footer>
             </div>
           ) : (
