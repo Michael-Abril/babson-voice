@@ -120,6 +120,54 @@ const CAMPAIGN_WEEK_EVENTS: {
   },
 ];
 
+const TRANSITION_UPCOMING_EVENTS: {
+  id: string;
+  title: string;
+  day: string;
+  date: string;
+  time: string;
+  location: string;
+  description: string;
+  rsvpHref?: string;
+  imageSrc: string;
+}[] = [
+  {
+    id: 'graduate-international-dinner',
+    title: 'Graduate International Dinner',
+    day: 'Wednesday',
+    date: 'April 15',
+    time: '5:30pm - 7:00pm',
+    location: 'Knight Auditorium, United States',
+    description:
+      'The Graduate International Dinner (International Dinner) is an opportunity to celebrate the cultural diversity of Babson’s graduate student population. Through this long-standing annual event, graduate students and partners come together in a display of culture through food, music, dance. Grad Student Partners are welcome!!',
+    rsvpHref: 'https://engage.babson.edu/gsc/rsvp_boot?id=376123',
+    imageSrc: 'https://i.imgur.com/hrIJLpM.jpeg',
+  },
+  {
+    id: 'commencement-2026',
+    title: 'End of Semester Spring Party!',
+    day: 'Thursday',
+    date: 'April 23, 2026',
+    time: '7:00-10:00 PM EDT',
+    location: 'Howl at the Moon',
+    description:
+      'Join us at Howl at the Moon for the LAST party of the semester — Bring your festive best Spring outfit with a little bit of personality! Expect live performances, sing-alongs, dancing, raffles, drinks, food, and a professional photographer. Guests are welcome to stay after 10 PM, when the venue opens to the public for nonstop fun! Each ticket includes: 2 drinks per person and food stations.',
+    rsvpHref: 'https://engage.babson.edu/GSC/rsvp_boot?id=376200',
+    imageSrc: 'https://i.imgur.com/ySjp2zk.jpeg',
+  },
+  {
+    id: 'commencement-2026',
+    title: 'Commencement 2026',
+    day: 'Saturday',
+    date: 'May 16, 2026',
+    time: '2:45-5:30 p.m.',
+    location: 'Graduate Ceremony',
+    description: 'Tickets are not required for this ceremony.',
+    rsvpHref: 'https://www.babson.edu/commencement/',
+    imageSrc: 'https://i.imgur.com/UXr2S56.jpeg',
+  },
+];
+
 function isCampaignEventPast(eventEndAt: string, now: Date): boolean {
   return now.getTime() > new Date(eventEndAt).getTime();
 }
@@ -1013,7 +1061,60 @@ export default function HomePage() {
                 </div>
               </section>
 
-              {/* 6. Meet the team */}
+              {/* 6. Upcoming GSC events */}
+              <section className="mt-14 w-full md:max-w-5xl" aria-label="Upcoming Graduate Student Council events">
+                <h2 className="text-center text-[22px] font-bold tracking-tight text-[#0f1f1a] md:text-2xl">
+                  Upcoming GSC events
+                </h2>
+                <p className="mx-auto mt-2 max-w-2xl text-center text-[14px] text-gray-500">
+                  Join us in person and keep building cross-program community together.
+                </p>
+                <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 md:gap-4">
+                  {TRANSITION_UPCOMING_EVENTS.map((ev) => (
+                    <article
+                      key={ev.id}
+                      aria-label={`${ev.title}, ${ev.day} ${ev.date}`}
+                      className="flex flex-col overflow-hidden rounded-lg border border-gray-200/80 bg-[#fafafa] text-center shadow-sm transition-[background-color,border-color] duration-300"
+                    >
+                      <header className="bg-emerald-800 px-3 py-3 text-white">
+                        <p className="text-[15px] font-bold leading-tight">{ev.day}</p>
+                        <p className="mt-0.5 text-[13px] font-semibold text-white/95">{ev.date}</p>
+                      </header>
+                      <div className="relative aspect-[4/3] w-full bg-gray-100">
+                        <Image
+                          src={ev.imageSrc}
+                          alt={`${ev.title} event`}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                      </div>
+                      <div className="flex-1 px-4 py-4">
+                        <p className="text-[16px] font-bold leading-tight text-[#0f1f1a]">{ev.title}</p>
+                        <p className="mt-2 text-[13px] font-bold text-gray-900">{ev.time}</p>
+                        <p className="mt-1 text-[12px] font-medium text-gray-600">{ev.location}</p>
+                        <p className="mt-3 text-[12px] leading-snug text-gray-700">{ev.description}</p>
+                      </div>
+                      <div className="mt-auto border-t border-gray-200 bg-white px-2 py-2.5">
+                        {ev.rsvpHref ? (
+                          <a
+                            href={ev.rsvpHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[13px] font-semibold text-emerald-700 underline underline-offset-2 hover:text-emerald-800"
+                          >
+                            RSVP
+                          </a>
+                        ) : (
+                          <span className="text-[13px] font-semibold text-gray-600">Details above</span>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
+              {/* 7. Meet the team */}
               <section className="mt-14 w-full md:max-w-5xl" aria-label="Graduate Student Council team">
                 <h2 className="text-center text-[22px] font-bold tracking-tight text-[#0f1f1a] md:text-2xl">
                   The team stepping up.
@@ -1083,7 +1184,7 @@ export default function HomePage() {
                 </div>
               </section>
 
-              {/* 7. Pillars (transition) */}
+              {/* 8. Pillars (transition) */}
               <section className="mt-14 w-full md:max-w-5xl">
                 <h2 className="text-center text-[22px] font-bold tracking-tight text-[#0f1f1a] md:text-2xl">
                   What we&apos;re building this year.
@@ -1168,14 +1269,14 @@ export default function HomePage() {
                 </div>
               </section>
 
-              {/* 8. Blockquote */}
+              {/* 9. Blockquote */}
               <blockquote className="mt-12 w-full max-w-2xl rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50/90 to-white px-6 py-7 shadow-sm ring-1 ring-emerald-900/5 md:mt-16 md:px-10 md:py-8">
                 <p className="text-center text-[17px] font-medium italic leading-snug tracking-tight text-[#1a2e24] md:text-[20px]">
                   Ask not what Babson can do for you, ask what you can do for Babson.
                 </p>
               </blockquote>
 
-              {/* 9. Footer — Instagram callout */}
+              {/* 10. Footer — Instagram callout */}
               <footer className="mt-10 w-full pb-2 md:mt-12">
                 <div
                   className="mx-auto w-full max-w-md rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50/95 to-white px-5 py-4 text-center shadow-sm ring-1 ring-emerald-900/5"
