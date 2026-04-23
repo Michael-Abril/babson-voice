@@ -131,6 +131,7 @@ const TRANSITION_UPCOMING_EVENTS: {
   rsvpHref?: string;
   ctaLabel?: string;
   imageSrc: string;
+  completed?: boolean;
 }[] = [
   {
     id: 'graduate-international-dinner',
@@ -143,6 +144,7 @@ const TRANSITION_UPCOMING_EVENTS: {
       'The Graduate International Dinner (International Dinner) is an opportunity to celebrate the cultural diversity of Babson’s graduate student population. Through this long-standing annual event, graduate students and partners come together in a display of culture through food, music, dance. Grad Student Partners are welcome!!',
     rsvpHref: 'https://engage.babson.edu/gsc/rsvp_boot?id=376123',
     imageSrc: 'https://i.imgur.com/hrIJLpM.jpeg',
+    completed: true,
   },
   {
     id: 'commencement-2026',
@@ -304,6 +306,13 @@ const TRANSITION_TEAM: {
     linkedinUrl: 'https://www.linkedin.com/in/jakerossetto/',
   },
   {
+    role: 'Chief of Operations',
+    name: "Akshay Karumuri, MBA '27",
+    quote: 'The connective tissue of the GSC — making sure every club and every student feels supported.',
+    photoSrc: 'https://i.imgur.com/ma7TBN1.jpeg',
+    linkedinUrl: 'https://www.linkedin.com/in/akshaykarumuri/',
+  },
+  {
     role: 'Chief of Graduate Student Life',
     name: "Rahul Luthra, MBA '27",
     quote: (
@@ -371,13 +380,6 @@ const TRANSITION_TEAM: {
     quote: 'Ensuring every program and every background has a seat at the table.',
     photoSrc: 'https://i.imgur.com/JEWZI2X.png',
     linkedinUrl: 'https://www.linkedin.com/in/rashmi-tripathi1/',
-  },
-  {
-    role: 'Chief of Operations',
-    name: "Akshay Karumuri, MBA '27",
-    quote: 'The connective tissue of the GSC — making sure every club and every student feels supported.',
-    photoSrc: 'https://i.imgur.com/ma7TBN1.jpeg',
-    linkedinUrl: 'https://www.linkedin.com/in/akshaykarumuri/',
   },
 ];
 
@@ -1096,6 +1098,21 @@ export default function HomePage() {
                           className="object-cover"
                           sizes="(max-width: 768px) 100vw, 33vw"
                         />
+                        {ev.completed && (
+                          <div
+                            className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25"
+                            aria-hidden
+                          >
+                            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg ring-4 ring-white/90">
+                              <Check
+                                className="h-8 w-8"
+                                strokeWidth={3}
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div className="flex-1 px-4 py-4">
                         <p className="text-[16px] font-bold leading-tight text-[#0f1f1a]">{ev.title}</p>
