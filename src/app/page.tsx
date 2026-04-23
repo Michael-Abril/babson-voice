@@ -372,7 +372,13 @@ const TRANSITION_TEAM: {
     photoSrc: 'https://i.imgur.com/JEWZI2X.png',
     linkedinUrl: 'https://www.linkedin.com/in/rashmi-tripathi1/',
   },
-  { role: 'Chief of Operations', name: 'TBD', quote: '', pending: true },
+  {
+    role: 'Chief of Operations',
+    name: "Akshay Karumuri, MBA '27",
+    quote: 'The connective tissue of the GSC — making sure every club and every student feels supported.',
+    photoSrc: 'https://i.imgur.com/ma7TBN1.jpeg',
+    linkedinUrl: 'https://www.linkedin.com/in/akshaykarumuri/',
+  },
 ];
 
 const GSC_CALENDAR_EMBED_SRC =
